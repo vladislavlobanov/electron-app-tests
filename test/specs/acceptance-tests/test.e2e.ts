@@ -9,7 +9,6 @@ describe('MongoDB Query Execution Test', () => {
 
         const runButton = await browser.$('.btn.btn-primary.btn-block');
         await runButton.click();
-        await new Promise(resolve => setTimeout(resolve, 10000));
 
         const resultElement = await browser.$('.card-body pre');
         const resultText = await resultElement.getText();
