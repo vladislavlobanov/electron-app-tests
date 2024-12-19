@@ -45,8 +45,8 @@ jobs:
         run: |
           echo "Creating test database and collection..."
           mongosh <<EOF
-          use testDatabase
-          db.testCollection.insertMany([
+          use test
+          db.test.insertMany([
             { name: "test1", value: 1 },
             { name: "test2", value: 2 },
             { name: "test3", value: 3 }
