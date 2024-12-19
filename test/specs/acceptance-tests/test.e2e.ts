@@ -14,7 +14,12 @@ describe('MongoDB Query Execution Test', () => {
         const resultText = await resultElement.getText();
 
         assert.notInclude(resultText, 'Invalid Query', 'Query result should not contain "Invalid Query"');
-        assert.include(resultText, '[]', 'Query result should start with []"');
+        const expectedText = JSON.stringify([
+          { _id: "676411590110e98fa92337a1", name: "test1", value: 1 },
+          { _id: "676411590110e98fa92337a2", name: "test2", value: 2 },
+          { _id: "676411590110e98fa92337a3", name: "test3", value: 3 },
+        ], null, 2);
+        assert.include(resultText, expectedText, 'Query result should match');
 
     });
 });
