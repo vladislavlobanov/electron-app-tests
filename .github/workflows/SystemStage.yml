@@ -44,7 +44,6 @@ jobs:
       - name: Create test database and collection
         run: |
           echo "Creating test database and collection..."
-          mongod --config /opt/homebrew/etc/mongod.conf --fork
           mongosh <<EOF
           use testDatabase
           db.testCollection.insertMany([
