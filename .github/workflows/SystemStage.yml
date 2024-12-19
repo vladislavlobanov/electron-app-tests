@@ -40,11 +40,12 @@ jobs:
             echo "MongoDB is not ready yet, retrying in 5 seconds..."
             sleep 5
           done
-          
+
       - name: Create test database and collection
         run: |
           echo "Creating test database and collection..."
-          mongo <<EOF
+          mongod --config /opt/homebrew/etc/mongod.conf --fork
+          mongosh <<EOF
           use testDatabase
           db.testCollection.insertMany([
             { name: "test1", value: 1 },
@@ -59,3 +60,8 @@ jobs:
 
       - name: Run pipeline.sh
         run: ./pipeline.sh 
+
+      - name: Stop MongoDB
+        run: |
+          echo "Stop MongoDB..."
+          brew services stop mongodb-community@6.0
