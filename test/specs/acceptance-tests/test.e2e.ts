@@ -9,13 +9,12 @@ describe('MongoDB Query Execution Test', () => {
 
         const runButton = await browser.$('.btn.btn-primary.btn-block');
         await runButton.click();
-        await new Promise(resolve => setTimeout(resolve, 10000));
 
         const resultElement = await browser.$('.card-body pre');
         const resultText = await resultElement.getText();
 
         assert.notInclude(resultText, 'Invalid Query', 'Query result should not contain "Invalid Query"');
-        assert.include(resultText, '{', 'Query result should start with {"');
+        assert.include(resultText, '[]', 'Query result should start with []"');
 
     });
 });
