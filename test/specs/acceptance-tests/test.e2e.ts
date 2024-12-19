@@ -1,7 +1,7 @@
 import { browser } from '@wdio/globals'
 import { assert } from 'chai';
 
-
+ 
 describe('MongoDB Query Execution Test', () => {
     it('should execute a simple query and display results', async () => {
         const queryInput = await browser.$('.card-body textarea');
@@ -9,6 +9,7 @@ describe('MongoDB Query Execution Test', () => {
 
         const runButton = await browser.$('.btn.btn-primary.btn-block');
         await runButton.click();
+        await new Promise(resolve => setTimeout(resolve, 10000));
 
         const resultElement = await browser.$('.card-body pre');
         const resultText = await resultElement.getText();
