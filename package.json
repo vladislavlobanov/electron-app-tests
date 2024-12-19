@@ -2,6 +2,7 @@
   "name": "electron-app-tests",
   "type": "module",
   "devDependencies": {
+    "@types/chai": "^5.0.1",
     "@wdio/cli": "^9.4.3",
     "@wdio/local-runner": "^9.4.3",
     "@wdio/mocha-framework": "^9.4.3",

@@ -25,6 +25,34 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install MongoDB
+        run: |
+          echo "Installing MongoDB..."
+          brew tap mongodb/brew
+          brew install mongodb-community@6.0
+
+      - name: Start MongoDB
+        run: |
+          echo "Starting MongoDB..."
+          brew services start mongodb/brew/mongodb-community@6.0
+          echo "Waiting for MongoDB to be ready..."
+          until nc -z localhost 27017; do
+            echo "MongoDB is not ready yet, retrying in 5 seconds..."
+            sleep 5
+          done
+          
+      - name: Create test database and collection
+        run: |
+          echo "Creating test database and collection..."
+          mongo <<EOF
+          use testDatabase
+          db.testCollection.insertMany([
+            { name: "test1", value: 1 },
+            { name: "test2", value: 2 },
+            { name: "test3", value: 3 }
+          ])
+          EOF
+
       - name: Set Permissions
         # Allow execute pipeline script
         run: chmod 755 pipeline.sh
