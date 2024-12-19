@@ -1,0 +1,33 @@
+name: System Stage
+
+# on:
+#   schedule:
+#     - cron: "1 0 * * 1-5"
+
+on: [workflow_dispatch]
+
+permissions: write-all
+
+jobs:
+  build:
+    name: System Stage
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: macos-latest
+    steps:
+      - name: Github checkout
+        uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Set Permissions
+        # Allow execute pipeline script
+        run: chmod 755 pipeline.sh
+
+      - name: Run pipeline.sh
+        run: ./pipeline.sh 
