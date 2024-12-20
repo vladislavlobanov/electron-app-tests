@@ -52,12 +52,18 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
-          name: "MongoDB-Query-Executor-Mac.dmg"
           pattern: "*.dmg"
           repository: vaisakhsasikumar/my-electron-app
 
       - name: Mount DMG
-        run: hdiutil attach "MongoDB-Query-Executor-Mac.dmg" -nobrowse -quiet
+        run: |
+          dmg_file=$(find . -maxdepth 1 -name '*.dmg' | head -n 1)
+          if [ -n "$dmg_file" ]; then
+              hdiutil attach "$dmg_file" -nobrowse -quiet
+          else
+              echo "No .dmg file found in the current directory."
+              exit 1
+          fi
 
       - name: Set Permissions
         # Allow execute pipeline script
