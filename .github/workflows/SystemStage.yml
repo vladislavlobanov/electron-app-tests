@@ -48,6 +48,14 @@ jobs:
       #       { name: "test3", value: 3 }
       #     ])
       #     EOF
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Get Last Workflow Run ID
+        id: get_run_id
+        run: |
+          response=$(curl -s 'https://api.github.com/repos/vaisakhsasikumar/my-electron-app/actions/workflows/nightlyBuild.yml/runs')
+          echo "::set-output name=run_id::$(echo "$response" | jq -r '.workflow_runs[0].id')"
 
       - name: Download Artifacts
         uses: actions/download-artifact@v4
@@ -55,6 +63,7 @@ jobs:
           # name: MongoDB Query Executor
           github-token: ${{ secrets.GITHUB_TOKEN }}
           repository: vaisakhsasikumar/my-electron-app
+          run-id: ${{ steps.get_run_id.outputs.run_id }}
 
       - run: ls -R
 
