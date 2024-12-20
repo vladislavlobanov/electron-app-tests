@@ -52,7 +52,7 @@ jobs:
         id: get_run_id
         run: |
           response=$(curl -s 'https://api.github.com/repos/vaisakhsasikumar/my-electron-app/actions/workflows/nightlyBuild.yml/runs')
-          echo "::set-output name=run_id::$(echo "$response" | grep -o '"id":[0-9]*' | head -n 1 | sed 's/"id"://')"
+          echo "::set-output name=run_id::$(echo "$response" | grep -o '"workflow_id":[0-9]*' | head -n 1 | sed 's/"id"://')"
 
       - name: Download Artifacts
         uses: actions/download-artifact@v4
