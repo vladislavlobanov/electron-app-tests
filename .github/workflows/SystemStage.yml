@@ -48,14 +48,11 @@ jobs:
       #       { name: "test3", value: 3 }
       #     ])
       #     EOF
-      - name: Install jq
-        run: sudo apt-get install -y jq
-
       - name: Get Last Workflow Run ID
         id: get_run_id
         run: |
           response=$(curl -s 'https://api.github.com/repos/vaisakhsasikumar/my-electron-app/actions/workflows/nightlyBuild.yml/runs')
-          echo "::set-output name=run_id::$(echo "$response" | jq -r '.workflow_runs[0].id')"
+          echo "::set-output name=run_id::$(echo "$response" | grep -o '"id":[0-9]*' | head -n 1 | sed 's/"id"://')"
 
       - name: Download Artifacts
         uses: actions/download-artifact@v4
