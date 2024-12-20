@@ -48,11 +48,20 @@ jobs:
       #       { name: "test3", value: 3 }
       #     ])
       #     EOF
+      - name: Install jq
+        run: brew install jq
+
       - name: Get Last Workflow Run ID
-        id: get_run_id
+        id: fetch_run_id
         run: |
+          # Fetch the list of workflow runs
           response=$(curl -s 'https://api.github.com/repos/vaisakhsasikumar/my-electron-app/actions/workflows/nightlyBuild.yml/runs')
-          echo "::set-output name=run_id::$(echo "$response" | grep -o '"workflow_id":[0-9]*' | head -n 1 | sed 's/"id"://')"
+          
+          # Extract the first run_id and ensure it's a number
+          run_id=$(echo "$response" | jq -r '.workflow_runs[0].workflow_id | tonumber')
+          
+          # Output the run_id for subsequent steps
+          echo "::set-output name=run_id::$run_id"
 
       - name: Download Artifacts
         uses: actions/download-artifact@v4
@@ -60,7 +69,7 @@ jobs:
           # name: MongoDB Query Executor
           github-token: ${{ secrets.GITHUB_TOKEN }}
           repository: vaisakhsasikumar/my-electron-app
-          run-id: ${{ steps.get_run_id.outputs.run_id }}
+          run-id: ${{ steps.fetch_run_id.outputs.run_id }}
 
       - run: ls -R
 
