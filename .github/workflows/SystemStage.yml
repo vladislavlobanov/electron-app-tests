@@ -58,7 +58,7 @@ jobs:
           response=$(curl -s 'https://api.github.com/repos/vaisakhsasikumar/my-electron-app/actions/workflows/nightlyBuild.yml/runs')
           
           # Extract the first run_id and ensure it's a number
-          run_id=$(echo "$response" | jq -r '.workflow_runs[0].workflow_id | tonumber')
+          run_id=$(echo "$response" | jq -r '.workflow_runs[0].id | tonumber')
           
           # Output the run_id for subsequent steps
           echo "::set-output name=run_id::$run_id"
