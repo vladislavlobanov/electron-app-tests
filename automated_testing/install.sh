@@ -2,14 +2,15 @@
 
 # Variables
 APP_NAME="MongoDB Query Executor"
-DMG_FILE="MongoDB-Query-Executor-Mac-1.0.0-Installer.dmg"
-MOUNT_NAME="MongoDB Query Executor 1.0.0-arm64"
-MOUNT_DIR="/Volumes/$MOUNT_NAME"
-DMG_URL="https://github.com/vaisakhsasikumar/my-electron-app/releases/download/v1.0.0/MongoDB-Query-Executor-Mac-1.0.0-Installer.dmg"
+DMG_FILE=$(find . -name "*.dmg" -print -quit)
+MOUNT_NAME=$(basename "$dmg_file")
+MOUNT_DIR="/Volumes/$APP_NAME"
+
+# DMG_URL="https://github.com/vaisakhsasikumar/my-electron-app/releases/download/v1.0.0/MongoDB-Query-Executor-Mac-1.0.0-Installer.dmg"
 
 # Step 1: Download the DMG file
-echo "Downloading DMG..."
-curl -L $DMG_URL -o $DMG_FILE
+# echo "Downloading DMG..."
+# curl -L $DMG_URL -o $DMG_FILE
 
 # Step 2: Mount the DMG
 echo "Mounting DMG..."
