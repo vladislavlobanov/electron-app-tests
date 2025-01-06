@@ -75,6 +75,8 @@ jobs:
         run: |
           dmg_file=$(find . -name "*.dmg" -print -quit)
           dmg_name=$(basename "$first_dmg_path")
+          echo $dmg_file
+          echo $dmg_name
           hdiutil attach "$dmg_file" -nobrowse -quiet
 
       # - name: Set Permissions
