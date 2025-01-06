@@ -18,7 +18,7 @@ MOUNT_DIR="/Volumes/$APP_NAME"
 # Step 2: Mount the DMG
 echo "Mounting DMG..."
 hdiutil attach $DMG_FILE -nobrowse -quiet
-hdiutil info
+diskutil list
 
 # Step 3: Copy the app to Applications
 echo "Copying app to Applications..."
