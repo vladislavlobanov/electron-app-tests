@@ -2,28 +2,25 @@
 
 # Variables
 APP_NAME="MongoDB Query Executor"
-DMG_FILE="MongoDB-Query-Executor-Mac-1.0.0-Installer.dmg"
-MOUNT_NAME="MongoDB Query Executor 1.0.0-arm64"
-MOUNT_DIR="/Volumes/$MOUNT_NAME"
-DMG_URL="https://github.com/vaisakhsasikumar/my-electron-app/releases/download/v1.0.0/MongoDB-Query-Executor-Mac-1.0.0-Installer.dmg"
+DMG_FILE=$(find . -name "*.dmg" -print -quit)
+MOUNT_NAME=$(basename "$dmg_file")
+MOUNT_DIR="/Volumes/$APP_NAME"
 
-# Step 1: Download the DMG file
-echo "Downloading DMG..."
-curl -L $DMG_URL -o $DMG_FILE
-
-# Step 2: Mount the DMG
+# Step 1: Mount the DMG
 echo "Mounting DMG..."
-hdiutil attach $DMG_FILE -nobrowse -quiet
+hdiutil attach "$DMG_FILE" -nobrowse
+hdiutil info
 
-# Step 3: Copy the app to Applications
+# Step 2: Copy the app to Applications
 echo "Copying app to Applications..."
 cp -R "$MOUNT_DIR/$APP_NAME.app" /Applications/
 
-# Step 4: Unmount the DMG
+# Step 3: Unmount the DMG
 echo "Unmounting DMG..."
-hdiutil detach "$MOUNT_DIR" -quiet
+hdiutil detach "$MOUNT_DIR" -force
 
-# Step 5: Verify the app exists
+# Step 4: Verify the app exists
+echo "Checking the app..."
 if [ -d "/Applications/$APP_NAME.app" ]; then
   # Fix warnings from Non App Store applications
   xattr -c "/Applications/$APP_NAME.app"
