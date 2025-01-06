@@ -17,7 +17,7 @@ MOUNT_DIR="/Volumes/$APP_NAME"
 
 # Step 2: Mount the DMG
 echo "Mounting DMG..."
-hdiutil attach $DMG_FILE -nobrowse -quiet
+hdiutil attach $DMG_FILE -nobrowse
 diskutil list
 
 # Step 3: Copy the app to Applications
@@ -28,7 +28,7 @@ cp -R "$MOUNT_DIR/$APP_NAME.app" /Applications/
 
 # Step 4: Unmount the DMG
 echo "Unmounting DMG..."
-hdiutil detach "$MOUNT_DIR" -quiet
+hdiutil detach "$MOUNT_DIR"
 
 # Step 5: Verify the app exists
 if [ -d "/Applications/$APP_NAME.app" ]; then
