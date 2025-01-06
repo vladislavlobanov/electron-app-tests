@@ -78,6 +78,7 @@ jobs:
           echo $dmg_file
           echo $dmg_name
           hdiutil attach "$dmg_file" -nobrowse -quiet
+          hdiutil info
 
       # - name: Set Permissions
       #   # Allow execute pipeline script
