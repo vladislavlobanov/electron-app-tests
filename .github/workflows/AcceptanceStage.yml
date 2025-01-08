@@ -17,7 +17,7 @@ jobs:
         run: |
           response=$(gh api /repos/vaisakhsasikumar/my-electron-app/actions/workflows/nightlyBuild.yml/runs?status=success&per_page=1)
           run_id=$(echo "$response" | jq -r '.workflow_runs[0].id | tonumber')
-          echo "run_id=$run_id" >> $GITHUB_ENV
+          echo "run_id=$run_id" >> $GITHUB_OUTPUT
 
   acceptance_env:
     name: Deploying artifacts to Acceptance Environment and run tests
