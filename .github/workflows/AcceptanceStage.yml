@@ -1,28 +1,33 @@
-name: System Stage
+name: Acceptance Stage
 
 on: [workflow_dispatch]
 
 permissions: write-all
 
 jobs:
-  build:
-    name: System Stage
+  fetch_run_id:
+    runs-on: macos-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Get Last Workflow Run ID
+        run: |
+          response=$(gh api /repos/vaisakhsasikumar/my-electron-app/actions/workflows/nightlyBuild.yml/runs?status=success&per_page=1)
+          run_id=$(echo "$response" | jq -r '.workflow_runs[0].id | tonumber')
+          echo "RUN_ID=$run_id" >> $GITHUB_ENV
+
+  acceptance_env:
+    name: Deploying artifacts to Acceptance Environment and run tests
     runs-on: macos-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    needs: fetch_run_id
     steps:
       - name: Github checkout
         uses: actions/checkout@v4
 
       - name: Install jq
         run: brew install jq
-
-      - name: Get Last Workflow Run ID
-        id: fetch_run_id
-        run: |
-          response=$(gh api /repos/vaisakhsasikumar/my-electron-app/actions/workflows/nightlyBuild.yml/runs?status=success&per_page=1)
-          run_id=$(echo "$response" | jq -r '.workflow_runs[0].id | tonumber')
-          echo "RUN_ID=$run_id" >> $GITHUB_ENV
 
       - name: Download Artifacts
         uses: actions/download-artifact@v4
@@ -78,3 +83,39 @@ jobs:
         run: |
           echo "Stop MongoDB..."
           brew services stop mongodb-community@6.0
+
+  e2e_env:
+    name: Deploying artifacts to E2E Environment and run tests
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: macos-latest
+    needs: fetch_run_id
+    steps:
+      - name: Github checkout
+        uses: actions/checkout@v4
+
+  acceptance_stage_badge:
+    name: Deploying artifacts to E2E Environment and run tests
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs: [acceptance_env, e2e_env]
+    steps:
+      - name: E2E Environment badge (Success)
+        if: ${{ !contains(needs.*.result, 'failure') }}
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: acceptance_stage
+          LABEL: 'Acceptance Stage'
+          STATUS: 'Success'
+          COLOR: green
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+      - name: E2E Environment badge (Failure)
+        if: ${{ contains(needs.*.result, 'failure') }}
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: acceptance_stage
+          LABEL: 'Acceptance Stage'
+          STATUS: 'Failure'
+          COLOR: red
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
