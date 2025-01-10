@@ -24,7 +24,7 @@ jobs:
           echo "run_id=$run_id" >> $GITHUB_OUTPUT
     
   cache-artifact:
-    name: Build - With Cache
+    name: Cache Artifact
     runs-on: macos-latest
     needs: fetch_run_id
     steps:
@@ -50,9 +50,6 @@ jobs:
     steps:
       - name: Github checkout
         uses: actions/checkout@v4
-
-      - name: Install jq
-        run: brew install jq
 
       - name: Restore Artifacts
         uses: actions/cache/restore@v4
@@ -123,8 +120,6 @@ jobs:
       - name: Github checkout
         uses: actions/checkout@v4
 
-      - name: Install jq
-        run: brew install jq
 
       - name: Restore Artifacts
         uses: actions/cache/restore@v4
