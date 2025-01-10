@@ -39,14 +39,14 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: ./MongoDB Query Executor
-          key: macos-cache-artifact
+          key: ${{ runner.os }}-cache-artifact-${{needs.fetch_run_id.outputs.run_id}}
 
   acceptance_env:
     name: Deploying artifacts to Acceptance Environment and run tests
     runs-on: macos-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    needs: cache-artifact
+    needs: [fetch_run_id, cache-artifact]
     steps:
       - name: Github checkout
         uses: actions/checkout@v4
@@ -58,7 +58,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: ./MongoDB Query Executor
-          key: macos-cache-artifact
+          key: ${{ runner.os }}-cache-artifact-${{needs.fetch_run_id.outputs.run_id}}
 
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -118,7 +118,7 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: macos-latest
-    needs: cache-artifact
+    needs: [fetch_run_id, cache-artifact]
     steps:
       - name: Github checkout
         uses: actions/checkout@v4
@@ -130,7 +130,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: ./MongoDB Query Executor
-          key: macos-cache-artifact
+          key: ${{ runner.os }}-cache-artifact-${{needs.fetch_run_id.outputs.run_id}}
 
       - name: Use Node.js
         uses: actions/setup-node@v4
