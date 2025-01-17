@@ -3,14 +3,15 @@ import { assert } from "chai";
 
 describe("MongoDB Query Execution Test", () => {
   it("should execute a simple query and display res-ults", async () => {
-    const queryInput = await browser.$(".card-body textarea");
+    const queryInput = browser.$(".card-body textarea");
     await queryInput.setValue("{}");
 
-    const runButton = await browser.$(".btn.btn-primary.btn-block");
+    expect(queryInput.getText()).toBe("{}");
+
+    const runButton = browser.$(".btn.btn-primary.btn-block");
     await runButton.click();
 
-    const resultElement = await browser.$(".card-body pre");
-    const resultText = await resultElement.getText();
+    const resultText = await browser.$("h5=Query Result").nextElement().getText();
 
     assert.notInclude(
       resultText,
