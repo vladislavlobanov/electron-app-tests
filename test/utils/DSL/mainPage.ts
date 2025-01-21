@@ -1,3 +1,5 @@
+import { browser } from "@wdio/globals";
+
 export class MainPage {
   // Selectors
 
@@ -22,7 +24,12 @@ export class MainPage {
   }
 
   // Retrieves the query history list container
-  get queryHistoryResults(): Promise<Array<WebdriverIO.Element>> {
+  get queryHistoryResults(): Promise<WebdriverIO.Element> {
+    return Promise.resolve($('[data-testid="queryHistory"]'));
+  }
+
+  // Retrieves the query history list container
+  get queryHistoryResultsLastElement(): Promise<Array<WebdriverIO.Element>> {
     return Promise.resolve($$('[data-testid="queryHistorySingleElement"]'));
   }
 
@@ -59,10 +66,20 @@ export class MainPage {
   }
 
   async getLastQueryHistoryText(): Promise<string> {
-    const results = await this.queryHistoryResults;
+    const results = await this.queryHistoryResultsLastElement;
     const lastElement = results[results.length - 1];
     const lastElementText = await lastElement.getText();
     return lastElementText;
+  }
+  // Retrieve application's title
+  async getApplicationTitle(): Promise<string> {
+    return browser.getTitle();
+  }
+
+  // Retrieve application's title
+  async checkApplicationIsReady(): Promise<boolean | undefined> {
+    const status = await browser.status();
+    return status.ready;
   }
 }
 
