@@ -3,6 +3,8 @@ name: Acceptance Stage
 on:
   schedule:
     - cron: "0 1 * * 1-5"
+  repository_dispatch:
+    types: [fresh-artifact]
   workflow_dispatch:
     inputs:
       run_id:
@@ -24,7 +26,8 @@ jobs:
       - name: Fetching last workflow Run ID
         id: run_id
         run: |
-          if [[ -n "${{ github.event.inputs.run_id }}" ]]; then
+          is_valid_input=${{ github.event.client_payload.run_id || github.event.inputs.run_id }}
+          if [[ -n "$is_valid_input" ]]; then
             run_id="${{ github.event.inputs.run_id }}"
           else
             response=$(gh api /repos/vaisakhsasikumar/my-electron-app/actions/workflows/nightlyBuild.yml/runs?status=success&per_page=1)
