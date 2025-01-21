@@ -1,8 +1,6 @@
 name: Acceptance Stage
 
 on:
-  schedule:
-    - cron: "0 1 * * 1-5"
   repository_dispatch:
     types: [fresh-artifact]
   workflow_dispatch:
@@ -28,9 +26,9 @@ jobs:
         run: |
           is_valid_input=${{ github.event.client_payload.run_id || github.event.inputs.run_id }}
           if [[ -n "$is_valid_input" ]]; then
-            run_id="${{ github.event.inputs.run_id }}"
+            run_id=$is_valid_input
           else
-            response=$(gh api /repos/vaisakhsasikumar/my-electron-app/actions/workflows/nightlyBuild.yml/runs?status=success&per_page=1)
+            response=$(gh api /repos/${{github.repository_owner}}/my-electron-app/actions/workflows/nightlyBuild.yml/runs?status=success&per_page=1)
             run_id=$(echo "$response" | jq -r '.workflow_runs[0].id | tonumber')
           fi
           echo "run_id=$run_id" >> $GITHUB_OUTPUT
@@ -51,7 +49,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: vaisakhsasikumar/my-electron-app
+          repository: ${{github.repository_owner}}/my-electron-app
           run-id: ${{needs.fetch_run_id.outputs.run_id}}
       - name: Save Cache
         id: cache-artifact-save
