@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "0 1 * * 1-5"
   workflow_dispatch:
+    inputs:
+      run_id:
+          description: "The id of the workflow run where the desired download artifact was uploaded from."
+          required: false
+          type: number
 
 permissions: write-all
 
@@ -19,8 +24,12 @@ jobs:
       - name: Fetching last workflow Run ID
         id: run_id
         run: |
-          response=$(gh api /repos/vaisakhsasikumar/my-electron-app/actions/workflows/nightlyBuild.yml/runs?status=success&per_page=1)
-          run_id=$(echo "$response" | jq -r '.workflow_runs[0].id | tonumber')
+          if [[ -n "${{ github.event.inputs.run_id }}" ]]; then
+            run_id="${{ github.event.inputs.run_id }}"
+          else
+            response=$(gh api /repos/vaisakhsasikumar/my-electron-app/actions/workflows/nightlyBuild.yml/runs?status=success&per_page=1)
+            run_id=$(echo "$response" | jq -r '.workflow_runs[0].id | tonumber')
+          fi
           echo "run_id=$run_id" >> $GITHUB_OUTPUT
     
   cache-artifact:
