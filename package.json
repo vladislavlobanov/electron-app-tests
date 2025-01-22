@@ -11,10 +11,10 @@
     "electron": "^30.5.1"
   },
   "scripts": {
-    "test:acceptance": "wdio run ./wdio.conf.ts --spec ./test/specs/acceptance-tests/**",
-    "test:e2e": "E2ETESTS=true wdio run ./wdio.conf.ts --spec ./test/specs/e2e-tests/**",
-    "test:external": "wdio run ./wdio.conf.ts --spec ./test/specs/external-system-contracts/*.ts",
-    "test:smoke": "wdio run ./wdio.conf.ts  --spec ./test/specs/smoke-tests/**",
+    "test:acceptance": "wdio run ./wdio.conf.ts --suite acceptance",
+    "test:e2e": "E2ETESTS=true wdio run ./wdio.conf.ts --suite e2e",
+    "test:external": "wdio run ./wdio.conf.ts --suite external",
+    "test:smoke": "wdio run ./wdio.conf.ts --suite smoke",
     "wdio": "wdio run ./wdio.conf.ts"
   },
   "dependencies": {

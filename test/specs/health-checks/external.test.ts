@@ -21,8 +21,7 @@ describe('External health check', () => {
               });
             });
           }
-        
-         ;
+          
         expect(await isMongoDBRunning()).toBe(true);
     })
 })

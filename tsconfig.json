@@ -5,7 +5,7 @@
         "target": "es2022",
         "lib": [
             "es2022",
-            "dom"
+            "dom",
         ],
         "types": [
             "node",

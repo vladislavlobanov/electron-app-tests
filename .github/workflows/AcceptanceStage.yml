@@ -128,7 +128,7 @@ jobs:
       - name: Run pipeline.sh
         run: ./pipeline.sh
 
-      - name: Run Smoke Tests
+      - name: Run Smoke Tests and Health Checks
         run: npm run test:smoke
 
       - name: Run Acceptance Tests
@@ -213,7 +213,7 @@ jobs:
       - name: Run pipeline.sh
         run: ./pipeline.sh
 
-      - name: Run Smoke Tests
+      - name: Run Smoke Tests and Health Checks
         run: npm run test:smoke
 
       - name: Set Permissions for External System Contract Tests script
