@@ -12,6 +12,10 @@ on:
 
 permissions: write-all
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+  
 jobs:
   fetch_run_id:
     name: Get Last Workflow Run ID
