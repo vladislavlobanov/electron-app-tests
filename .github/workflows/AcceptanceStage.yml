@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
     inputs:
       run_id:
-          description: "The id of the workflow run where the desired download artifact was uploaded from."
-          required: false
-          type: number
+        description: "The id of the workflow run where the desired download artifact was uploaded from."
+        required: false
+        type: number
 
 permissions: write-all
 
@@ -32,7 +32,7 @@ jobs:
             run_id=$(echo "$response" | jq -r '.workflow_runs[0].id | tonumber')
           fi
           echo "run_id=$run_id" >> $GITHUB_OUTPUT
-    
+
   cache-artifact:
     name: Cache Artifact
     runs-on: macos-latest
@@ -84,49 +84,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install MongoDB
-        run: |
-          echo "Installing MongoDB..."
-          brew tap mongodb/brew
-          brew install mongodb-community@6.0
+      - name: Set Permissions to bash scripts
+        run: chmod 755 ./automated_testing/*.sh
 
-      - name: Start MongoDB
-        run: |
-          echo "Starting MongoDB..."
-          brew services start mongodb/brew/mongodb-community@6.0
-          echo "Waiting for MongoDB to be ready..."
-          until nc -z localhost 27017; do
-            echo "MongoDB is not ready yet, retrying in 5 seconds..."
-            sleep 5
-          done
+      - name: Run application installation
+        run: ./automated_testing/install.sh
 
-      - name: Create test database and collection
-        run: |
-          echo "Creating test database and collection..."
-          mongosh <<EOF
-          use test
-          db.test.insertMany([
-            { name: "test1", value: 1 },
-            { name: "test2", value: 2 },
-            { name: "test3", value: 3 }
-          ])
-          EOF
-
-      - name: Install WireMock
-        run: |
-          echo "Installing WireMock..."
-          brew install wiremock-standalone
-
-      - name: Start WireMock
-        run: |
-          wiremock --local-response-templating --port 8080 &
-          sleep 5
-
-      - name: Set Permissions
-        run: chmod 755 pipeline.sh
-
-      - name: Run pipeline.sh
-        run: ./pipeline.sh
+      - name: Start Mock services
+        run: ./automated_testing/mock-end.sh
 
       - name: Run Smoke Tests and Health Checks
         run: npm run test:smoke
@@ -134,15 +99,8 @@ jobs:
       - name: Run Acceptance Tests
         run: npm run test:acceptance
 
-      - name: Stop MongoDB
-        run: |
-          echo "Stop MongoDB..."
-          brew services stop mongodb-community@6.0
-
-      - name: Stop WireMock
-        run: |
-          echo "Stop WireMock..."
-          pkill -f wiremock
+      - name: Stop Mock services
+        run: ./automated_testing/mock-end.sh
 
   e2e_env:
     name: Deploying artifacts to E2E Environment and run tests
@@ -153,7 +111,6 @@ jobs:
     steps:
       - name: Github checkout
         uses: actions/checkout@v4
-
 
       - name: Restore Artifacts
         uses: actions/cache/restore@v4
@@ -169,56 +126,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install MongoDB
-        run: |
-          echo "Installing MongoDB..."
-          brew tap mongodb/brew
-          brew install mongodb-community@6.0
+      - name: Set Permissions to bash scripts
+        run: chmod 755 ./automated_testing/*.sh
 
-      - name: Start MongoDB
-        run: |
-          echo "Starting MongoDB..."
-          brew services start mongodb/brew/mongodb-community@6.0
-          echo "Waiting for MongoDB to be ready..."
-          until nc -z localhost 27017; do
-            echo "MongoDB is not ready yet, retrying in 5 seconds..."
-            sleep 5
-          done
+      - name: Run application installation
+        run: ./automated_testing/install.sh
 
-      - name: Create test database and collection
-        run: |
-          echo "Creating test database and collection..."
-          mongosh <<EOF
-          use test
-          db.test.insertMany([
-            { name: "test1", value: 1 },
-            { name: "test2", value: 2 },
-            { name: "test3", value: 3 }
-          ])
-          EOF
-
-      - name: Install WireMock
-        run: |
-          echo "Installing WireMock..."
-          brew install wiremock-standalone
-
-      - name: Start WireMock
-        run: |
-          wiremock --local-response-templating --port 8080 &
-          sleep 5
-
-      - name: Set Permissions
-        run: chmod 755 pipeline.sh
-
-      - name: Run pipeline.sh
-        run: ./pipeline.sh
+      - name: Start Mock services
+        run: ./automated_testing/mock-end.sh
 
       - name: Run Smoke Tests and Health Checks
         run: npm run test:smoke
-
-      - name: Set Permissions for External System Contract Tests script
-        # Allow execute pipeline script
-        run: chmod 755 ./automated_testing/external-system-contracts-test.sh
 
       - name: Run External System Contract Tests
         run: ./automated_testing/external-system-contracts-test.sh
@@ -226,15 +144,8 @@ jobs:
       - name: Run E2E Tests
         run: npm run test:e2e
 
-      - name: Stop MongoDB
-        run: |
-          echo "Stop MongoDB..."
-          brew services stop mongodb-community@6.0
-
-      - name: Stop WireMock
-        run: |
-          echo "Stop WireMock..."
-          pkill -f wiremock
+      - name: Stop Mock services
+        run: ./automated_testing/mock-end.sh
 
   acceptance_stage_badge:
     name: Create status badge for workflow
