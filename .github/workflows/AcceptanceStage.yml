@@ -3,6 +3,8 @@ name: Acceptance Stage
 on:
   repository_dispatch:
     types: [fresh-artifact]
+  schedule:
+    - cron: "0 * * * 1-5"
   workflow_dispatch:
     inputs:
       run_id:
@@ -15,11 +17,43 @@ permissions: write-all
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-  
+
 jobs:
+  check_commits:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Check for new commits
+        id: check-commits
+        run: |
+          NEW_COMMITS=$(gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/${{ github.repository_owner }}/my-electron-app/commits?since=$(date -u -d '1 hour ago' '+%Y-%m-%dT%H:%M:%SZ'))
+          if [ $(echo $NEW_COMMITS | jq length) -gt 0 ]; then
+            echo "New commits found"
+            echo "has_new_commits=true" >> $GITHUB_OUTPUT
+          else
+            echo "No new commits found"
+            echo "has_new_commits=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Cancel workflow if no new commits
+        if: steps.check_commits.outputs.has_new_commits == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/${{ github.repository_owner }}/electron-app-tests/actions/runs/${{ github.run_id }}/cancel
+
   fetch_run_id:
     name: Get Last Workflow Run ID
     runs-on: ubuntu-latest
+    needs: [check_commits]
     outputs:
       run_id: ${{ steps.run_id.outputs.run_id }}
     env:
