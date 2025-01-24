@@ -19,13 +19,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check_commits:
+  check_new_commits:
+    name: Check if the app repo has new commits
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Check for new commits
-        id: check-commits
+        id: check_commits
         run: |
           NEW_COMMITS=$(gh api \
             -H "Accept: application/vnd.github+json" \
@@ -40,7 +41,7 @@ jobs:
           fi
 
       - name: Cancel workflow if no new commits
-        if: steps.check_commits.outputs.has_new_commits == 'false'
+        if: ${{ steps.check_commits.outputs.has_new_commits == 'false' && github.event_name == 'schedule' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -53,7 +54,7 @@ jobs:
   fetch_run_id:
     name: Get Last Workflow Run ID
     runs-on: ubuntu-latest
-    needs: [check_commits]
+    needs: [check_new_commits]
     outputs:
       run_id: ${{ steps.run_id.outputs.run_id }}
     env:
