@@ -188,8 +188,14 @@ jobs:
   upload_artifact:
     name: Upload Artifact
     runs-on: macos-latest
-    needs: [acceptance_env, e2e_env]
+    needs: [acceptance_env, e2e_env, fetch_run_id]
     steps:
+      - name: Restore Artifacts
+        uses: actions/cache/restore@v4
+        with:
+          path: ./MongoDB Query Executor
+          key: ${{ runner.os }}-cache-artifact-${{ needs.fetch_run_id.outputs.run_id }}
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
