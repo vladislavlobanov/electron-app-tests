@@ -195,7 +195,7 @@ jobs:
         with:
           retention-days: 5
           name: MongoDB Query Executor
-          path: ./MongoDB Query Executor/*.dmg
+          path: ./MongoDB Query Executor/**/*.dmg
           if-no-files-found: 'error'
 
   acceptance_stage_badge:
