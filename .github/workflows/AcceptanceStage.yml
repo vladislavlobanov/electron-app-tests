@@ -185,6 +185,19 @@ jobs:
       - name: Stop Mock services
         run: ./automated_testing/mock-end.sh
 
+  upload_artifact:
+    name: Upload Artifact
+    runs-on: macos-latest
+    needs: [acceptance_env, e2e_env]
+    steps:
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          retention-days: 5
+          name: MongoDB Query Executor
+          path: ./MongoDB Query Executor/*.dmg
+          if-no-files-found: 'error'
+
   acceptance_stage_badge:
     name: Create status badge for workflow
     runs-on: ubuntu-latest
