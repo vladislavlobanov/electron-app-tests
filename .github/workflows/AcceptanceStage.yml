@@ -135,6 +135,13 @@ jobs:
       - name: Run Smoke Tests and Health Checks
         run: ./automated_testing/run-smoke-tests.sh
 
+      - name: Set Permissions for Acceptance Test Theme Stubbing script that sests a theme env var
+        # Allow execute pipeline script
+        run: chmod 755 ./automated_testing/prepare-for-acceptance-tests.sh
+
+      - name: Run Acceptance Test Theme Stubbing script that sests a theme env var
+        run: ./automated_testing/prepare-for-acceptance-tests.sh
+
       - name: Run Acceptance Tests
         run: npm run test:acceptance
 
@@ -145,6 +152,7 @@ jobs:
     name: Deploying artifacts to E2E Environment and run tests
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      E2E_ENV: true
     runs-on: macos-latest
     needs: [fetch_run_id, cache-artifact]
     steps:
@@ -178,7 +186,7 @@ jobs:
         run: ./automated_testing/run-smoke-tests.sh
 
       - name: Run External System Contract Tests
-        run: ./automated_testing/external-system-contracts-test.sh
+        run: npm run test:external
 
       - name: Run E2E Tests
         run: npm run test:e2e
@@ -203,7 +211,7 @@ jobs:
           retention-days: 5
           name: MongoDB Query Executor
           path: ./MongoDB Query Executor/**/*.dmg
-          if-no-files-found: 'error'
+          if-no-files-found: "error"
 
   acceptance_stage_badge:
     name: Create status badge for workflow
