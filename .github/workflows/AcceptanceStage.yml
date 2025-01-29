@@ -110,30 +110,14 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Restore Artifacts
-        uses: actions/cache/restore@v4
+        uses: ./.github/actions/restore-artifacts@v1
         with:
-          path: ./MongoDB Query Executor
-          key: ${{ runner.os }}-cache-artifact-${{needs.fetch_run_id.outputs.run_id}}
+          run_id: ${{ needs.fetch_run_id.outputs.run_id }}
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+      - name: Common test steps
+        uses: ./.github/actions/common-tests@v1
         with:
           node-version: 20
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Set Permissions to bash scripts
-        run: chmod 755 ./automated_testing/*.sh
-
-      - name: Run application installation
-        run: ./automated_testing/install.sh
-
-      - name: Start Mock services
-        run: ./automated_testing/mock-start.sh
-
-      - name: Run Smoke Tests and Health Checks
-        run: ./automated_testing/run-smoke-tests.sh
 
       - name: Run Acceptance Test Theme Stubbing script that sests a theme env var
         run: ./automated_testing/prepare-for-acceptance-tests.sh
@@ -156,30 +140,14 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Restore Artifacts
-        uses: actions/cache/restore@v4
+        uses: ./.github/actions/restore-artifacts@v1
         with:
-          path: ./MongoDB Query Executor
-          key: ${{ runner.os }}-cache-artifact-${{needs.fetch_run_id.outputs.run_id}}
+          run_id: ${{ needs.fetch_run_id.outputs.run_id }}
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+      - name: Common test steps
+        uses: ./.github/actions/common-tests@v1
         with:
           node-version: 20
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Set Permissions to bash scripts
-        run: chmod 755 ./automated_testing/*.sh
-
-      - name: Run application installation
-        run: ./automated_testing/install.sh
-
-      - name: Start Mock services
-        run: ./automated_testing/mock-start.sh
-
-      - name: Run Smoke Tests and Health Checks
-        run: ./automated_testing/run-smoke-tests.sh
 
       - name: Run External System Contract Tests
         run: npm run test:external
@@ -196,10 +164,9 @@ jobs:
     needs: [acceptance_env, e2e_env, fetch_run_id]
     steps:
       - name: Restore Artifacts
-        uses: actions/cache/restore@v4
+        uses: ./.github/actions/restore-artifacts@v1
         with:
-          path: ./MongoDB Query Executor
-          key: ${{ runner.os }}-cache-artifact-${{ needs.fetch_run_id.outputs.run_id }}
+          run_id: ${{ needs.fetch_run_id.outputs.run_id }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
