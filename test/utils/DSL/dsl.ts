@@ -1,6 +1,3 @@
-import MainPage from "./mainPage";
-import Modal from "./modal";
-import MenuBar from "./menuBar";
 import { AllChannels, AppDriver } from "../types";
 import { UIAppDriver } from "../drivers/UI";
 
@@ -43,11 +40,11 @@ export class AppDsl {
   }
 
   public async setQuery(query: string) {
-    this.driver.setQuery(query);
+    await this.driver.setQuery(query);
   }
 
   public async clickRunQuery() {
-    this.driver.clickRunQuery();
+    await this.driver.clickRunQuery();
   }
 
   public async getQueryResult() {
