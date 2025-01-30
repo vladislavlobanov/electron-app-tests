@@ -106,17 +106,10 @@ jobs:
       VITE_VERSION_API: localhost:8080/api/check-version
     needs: [fetch_run_id, cache-artifact]
     steps:
-      - name: Github checkout
-        uses: actions/checkout@v4
-
-      - name: Restore Artifacts
-        uses: ./.github/actions/restore-artifacts@v1
+      - name: Checkout, restore, and common test steps
+        uses: ./.github/actions/checkout-restore-common@v1
         with:
           run_id: ${{ needs.fetch_run_id.outputs.run_id }}
-
-      - name: Common test steps
-        uses: ./.github/actions/common-tests@v1
-        with:
           node-version: 20
 
       - name: Run Acceptance Test Theme Stubbing script that sests a theme env var
@@ -136,17 +129,10 @@ jobs:
     runs-on: macos-latest
     needs: [fetch_run_id, cache-artifact]
     steps:
-      - name: Github checkout
-        uses: actions/checkout@v4
-
-      - name: Restore Artifacts
-        uses: ./.github/actions/restore-artifacts@v1
+      - name: Checkout, restore, and common test steps
+        uses: ./.github/actions/checkout-restore-common@v1
         with:
           run_id: ${{ needs.fetch_run_id.outputs.run_id }}
-
-      - name: Common test steps
-        uses: ./.github/actions/common-tests@v1
-        with:
           node-version: 20
 
       - name: Run External System Contract Tests
