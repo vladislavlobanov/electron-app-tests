@@ -13,8 +13,8 @@ describe("MongoDB Query Execution Test", () => {
 
     assert.notInclude(
       resultText,
-      "Invalid Query",
-      'Query result should not contain "Invalid Query"'
+      "Invalid query",
+      'Query result should not contain "Invalid query"'
     );
     assert.include(resultText, "test1", "Query result should contain field");
     assert.include(resultText, "test2", "Query result should contain field");
