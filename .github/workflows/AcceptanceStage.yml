@@ -131,6 +131,7 @@ jobs:
   e2e_env:
     name: Deploying artifacts to E2E Environment and run tests
     env:
+      VITE_VERSION_API: localhost:8080/api/check-version
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       E2E_ENV: true
     runs-on: macos-latest
