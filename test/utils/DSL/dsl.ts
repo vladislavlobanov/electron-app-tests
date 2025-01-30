@@ -1,19 +1,21 @@
-import { AllChannels, AppDriver } from "../types";
+import { AllChannels, AppDriver, Channels } from "../types";
 import { UIAppDriver } from "../drivers/UI";
 
 export class AppDrivers implements AppDriver {
-//   private activeChannels: Array<AllChannels>;
-  private drivers: Record<string, AppDriver> = {};
+  private driver!: AppDriver;
 
-  constructor() {
-    this.drivers["UI"] = new UIAppDriver();
-    // this.drivers["API"] = new ApiShopDriver();
-  }
-
-  get driver(): AppDriver {
-    // Get channel from annotations, see example: https://github.com/davef77/atdd-course-examples/blob/master/src/test/java/com/cd/acceptance/examples/bookshopping/drivers/BookShopDrivers.java
-    // For simplicity, let's just return the UI driver, but the proper implementation should make it come from the channel annotations
-    return this.drivers["UI"];
+  constructor(channel: AllChannels) {
+    switch (channel) {
+      case Channels.API:
+        // this.drivers[Channels.API] = new UIAppDriver();
+        break;
+      case Channels.UI: {
+        this.driver = new UIAppDriver();
+        break;
+      }
+      default:
+        break;
+    }
   }
 
   // @Override
