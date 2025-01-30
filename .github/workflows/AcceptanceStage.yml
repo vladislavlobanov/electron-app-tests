@@ -109,10 +109,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Optional Debugging Step
-      - name: List restore-common_tests directory
-        run: ls -la ./.github/actions/restore-common_tests
-
       - name: Restore artifacts and common test steps
         uses: ./.github/actions/restore-common_tests
         with:
@@ -140,10 +136,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Optional Debugging Step
-      - name: List restore-common_tests directory
-        run: ls -la ./.github/actions/restore-common_tests
-
       - name: Restore artifacts and common test steps
         uses: ./.github/actions/restore-common_tests
         with:
@@ -164,6 +156,9 @@ jobs:
     runs-on: macos-latest
     needs: [acceptance_env, e2e_env, fetch_run_id]
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
       - name: Restore Artifacts
         uses: ./.github/actions/restore-artifacts
         with:
