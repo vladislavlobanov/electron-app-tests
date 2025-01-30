@@ -1,21 +1,17 @@
 import { AllChannels, AppDriver, Channels } from "../types";
 import { UIAppDriver } from "../drivers/UI";
+import { APIAppDriver } from "../drivers/API";
 
 export class AppDrivers implements AppDriver {
-  private driver!: AppDriver;
+  private drivers = {} as Record<Channels, AppDriver>;
 
-  constructor(channel: AllChannels) {
-    switch (channel) {
-      case Channels.API:
-        // this.drivers[Channels.API] = new UIAppDriver();
-        break;
-      case Channels.UI: {
-        this.driver = new UIAppDriver();
-        break;
-      }
-      default:
-        break;
-    }
+  constructor(channels: Array<AllChannels>) {
+    this.drivers[Channels.UI] = new APIAppDriver();
+    this.drivers[Channels.API] = new UIAppDriver();
+  }
+
+  get driver() {
+    return this.drivers[Channels.UI];
   }
 
   // @Override
