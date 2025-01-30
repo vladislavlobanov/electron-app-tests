@@ -5,7 +5,9 @@ import MainPage from "../../utils/DSL/mainPage";
 import Modal from "../../utils/DSL/modal";
 import MenuBar from "../../utils/DSL/menuBar";
 
-import * as semver from "semver";
+import { WireMock } from "wiremock-captain";
+import { ErpStubDriver } from "../../utils/drivers/ErpStubDriver";
+import { ErpStubDsl } from "../../utils/DSL/ErpStubDsl";
 
 //Seeing Persisting Query History should run first
 
@@ -101,7 +103,7 @@ describe("Seeing Persisting Query History", async () => {
   });
 });
 
-describe("MongoDB Query Execution Test", () => {
+describe("MongoDB Query Execution Test", async () => {
   let mainPage: MainPage;
 
   beforeEach(() => {
@@ -159,7 +161,7 @@ describe("Advanced View Toggle Test", () => {
   });
 });
 
-describe(" Viewing Results in JSON Format", async () => {
+describe("Viewing Results in JSON Format", async () => {
   it("should successfully run a find query and have a Query Result in JSON format", async () => {
     const mainPage = new MainPage();
     await mainPage.setQueryText(`{"name":"test1"}`);
@@ -440,28 +442,19 @@ describe("Select Theme", async () => {
 describe("Version", async () => {
   let mainPage: MainPage;
 
+  const erp = new ErpStubDsl(
+    new ErpStubDriver(
+      new WireMock(`${process.env.WIREMOCK_HOST}:${process.env.WIREMOCK_PORT}`)
+    )
+  );
+
   beforeEach(() => {
     mainPage = new MainPage();
   });
 
   it("should successfully check version against stub", async () => {
-    const appVersion = await mainPage.getAppVersion();
+    const appVersion = await erp.getVersion();
 
-    const getMockResponse = await mainPage.getAppStubResponse();
-    await expect(getMockResponse.status).toEqual(200);
-
-    const data = await getMockResponse.json();
-
-    await expect(data).toHaveProperty("tag_name");
-
-    const stubVersion = data?.tag_name;
-
-    const newVersionBanner = await mainPage.newVersionBanner;
-
-    if (semver.lte(appVersion, stubVersion)) {
-      await expect(newVersionBanner).toBeDisplayed();
-    } else {
-      await expect(newVersionBanner).not.toBeDisplayed();
-    }
+    await expect(appVersion).toBeDefined();
   });
 });

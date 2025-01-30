@@ -4,6 +4,10 @@ export interface AppDriver {
   getQueryResult: () => Promise<string>;
 }
 
+export interface ErpStubDriverInterface {
+  getVersion: () => Promise<void>;
+}
+
 export enum Channels {
   UI = "UI",
   API = "API",
