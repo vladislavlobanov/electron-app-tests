@@ -103,7 +103,9 @@ jobs:
     runs-on: macos-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      VITE_VERSION_API: localhost:8080/api/check-version
+      OWMER: ${{ github.repository_owner }}
+      VITE_VERSION_API: http://localhost:8080/api/check-version
+      ACP_ENV: true
     needs: [fetch_run_id, cache-artifact]
     steps:
       - name: Checkout Repository
@@ -129,6 +131,7 @@ jobs:
     env:
       VITE_VERSION_API: localhost:8080/api/check-version
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      OWMER: ${{ github.repository_owner }}
       E2E_ENV: true
     runs-on: macos-latest
     needs: [fetch_run_id, cache-artifact]
