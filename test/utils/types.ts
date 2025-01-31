@@ -6,6 +6,17 @@ export interface AppDriver {
 
 export interface ErpStubDriverInterface {
   getVersion: () => Promise<void>;
+
+  willReturnHigherVersion: () => Promise<void>;
+  willReturnLowerVersion: () => Promise<void>;
+}
+
+export interface ErpDriver {
+  willReturnHigherVersion: () => Promise<void>;
+  shouldHaveHigherVersion: (version: string) => Promise<void>;
+
+  willReturnLowerVersion: () => Promise<void>;
+  shouldHaveLowerVersion: (version: string) => Promise<void>;
 }
 
 export enum Channels {
