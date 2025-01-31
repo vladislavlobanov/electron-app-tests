@@ -9,7 +9,7 @@ import {
 } from "../drivers/GithubStubDriver";
 import type { GithubDriver } from "../types";
 
-abstract class BaseErpDriverTest {
+abstract class BaseGithubDriverTest {
   public erpDriver: GithubDriver;
 
   abstract getVersionUrl(): string;
@@ -41,7 +41,7 @@ abstract class BaseErpDriverTest {
   }
 }
 
-export class GithubStubDriverTest extends BaseErpDriverTest {
+export class GithubStubDriverTest extends BaseGithubDriverTest {
   private driver;
   private baseUrl = `${process.env.WIREMOCK_HOST}:${process.env.WIREMOCK_PORT}`;
 
@@ -72,7 +72,7 @@ export class GithubStubDriverTest extends BaseErpDriverTest {
   }
 }
 
-export class RealGithubDriverTest extends BaseErpDriverTest {
+export class RealGithubDriverTest extends BaseGithubDriverTest {
   private driver;
 
   constructor() {
