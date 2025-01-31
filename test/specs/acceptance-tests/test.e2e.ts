@@ -444,7 +444,7 @@ describe("Select Theme", async () => {
 describe("Version", async () => {
   let mainPage: MainPage;
 
-  const erp = new GithubStubDsl(
+  const githubStubDsl = new GithubStubDsl(
     new GithubStubDriver(
       new WireMock(`${process.env.WIREMOCK_HOST}:${process.env.WIREMOCK_PORT}`)
     )
@@ -455,7 +455,7 @@ describe("Version", async () => {
   });
 
   it("should successfully check version against stub", async () => {
-    const appVersion = await erp.getVersion();
+    const appVersion = await githubStubDsl.getVersion();
 
     await expect(appVersion).toBeDefined();
   });
