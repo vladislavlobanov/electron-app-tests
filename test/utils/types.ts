@@ -6,13 +6,6 @@ export interface AppDriver {
   getQueryResult: () => Promise<string>;
 }
 
-export interface GithubStubDriverInterface {
-  getVersion: () => Promise<void>;
-
-  willReturnHigherVersion: () => Promise<void>;
-  willReturnLowerVersion: () => Promise<void>;
-}
-
 export interface GithubDriver {
   willReturnHigherVersion: () => Promise<void>;
   shouldHaveHigherVersion: (version: string) => Promise<void>;

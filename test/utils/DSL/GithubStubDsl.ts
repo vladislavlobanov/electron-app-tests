@@ -1,5 +1,4 @@
 import { GithubStubDriver } from "../drivers/GithubStubDriver";
-import type { GithubStubDriverInterface } from "../types";
 
 /**
  * GithubStubDsl should be inside describe (on top of that).
@@ -7,7 +6,7 @@ import type { GithubStubDriverInterface } from "../types";
  * So in order to be able to mock API calls, that triggered on app start, we need to configure it before application launch.
  */
 
-export class GithubStubDsl implements GithubStubDriverInterface {
+export class GithubStubDsl {
   private driver: GithubStubDriver;
 
   constructor(driver: GithubStubDriver) {
