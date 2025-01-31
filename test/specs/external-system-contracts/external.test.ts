@@ -18,21 +18,21 @@ describe("External System Contracts Test", () => {
 });
 
 describe("External System Stub Contract Test. Github API", async () => {
-  const erpStub = new GithubStubDriverTest();
+  const githubStub = new GithubStubDriverTest();
 
   it("should successfully check that higher version exist", async () => {
-    await erpStub.shouldReturnHigherVersionThanCurrent("1.0.0");
+    await githubStub.shouldReturnHigherVersionThanCurrent("1.0.0");
   });
 
   it("should successfully check that lower version exist", async () => {
-    await erpStub.shouldReturnLowerVersionThanCurrent("1.0.0");
+    await githubStub.shouldReturnLowerVersionThanCurrent("1.0.0");
   });
 });
 
 describe("External System Test Instance Contract Test. Github API", async () => {
-  const erpReal = new RealGithubDriverTest();
+  const githubReal = new RealGithubDriverTest();
 
   it("should successfully check version against stub", async () => {
-    await erpReal.shouldReturnActualVersion();
+    await githubReal.shouldReturnActualVersion();
   });
 });
