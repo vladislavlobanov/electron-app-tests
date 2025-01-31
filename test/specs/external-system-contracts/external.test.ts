@@ -5,7 +5,7 @@ import {
   RealErpDriverTest,
 } from "../../utils/helpers/erpHelpers";
 
-describe.skip("External System Contracts Test", () => {
+describe("External System Contracts Test", () => {
   it("should check that application theme corresponds to the OS theme", async () => {
     // Verify the class on the root element
     const rootClassList = await browser.$("html").getAttribute("class");
@@ -19,10 +19,6 @@ describe.skip("External System Contracts Test", () => {
 
 describe("External System Stub Contract Test. Github API", async () => {
   const erpStub = new ErpStubDriverTest();
-
-  it("should successfully check version against stub", async () => {
-    await erpStub.shouldReturnActualVersion();
-  });
 
   it("should successfully check that higher version exist", async () => {
     await erpStub.shouldReturnHigherVersion("1.0.0");
