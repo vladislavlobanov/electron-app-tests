@@ -3,14 +3,17 @@ import { assert } from "chai";
 import * as semver from "semver";
 import { WireMock } from "wiremock-captain";
 
-import { ErpStubDriver, RealErpDriver } from "../drivers/ErpStubDriver";
-import { ErpDriver } from "../types";
+import {
+  GithubStubDriver,
+  RealGithubDriver,
+} from "../drivers/GithubStubDriver";
+import type { GithubDriver } from "../types";
 
 abstract class BaseErpDriverTest {
-  public erpDriver: ErpDriver;
+  public erpDriver: GithubDriver;
 
   abstract getVersionUrl(): string;
-  abstract createErpDriver(): ErpDriver;
+  abstract createErpDriver(): GithubDriver;
 
   abstract setupHigherVersion(): Promise<void>;
   abstract setupLowerVersion(): Promise<void>;
@@ -38,19 +41,19 @@ abstract class BaseErpDriverTest {
   }
 }
 
-export class ErpStubDriverTest extends BaseErpDriverTest {
+export class GithubStubDriverTest extends BaseErpDriverTest {
   private driver;
   private baseUrl = `${process.env.WIREMOCK_HOST}:${process.env.WIREMOCK_PORT}`;
 
   constructor() {
     super();
     const erpStub = new WireMock(this.baseUrl);
-    this.driver = new ErpStubDriver(erpStub);
+    this.driver = new GithubStubDriver(erpStub);
   }
 
   public createErpDriver() {
     const erpStub = new WireMock(this.baseUrl);
-    const driver = new ErpStubDriver(erpStub);
+    const driver = new GithubStubDriver(erpStub);
 
     driver.setup(this.getVersionUrl());
 
@@ -69,16 +72,16 @@ export class ErpStubDriverTest extends BaseErpDriverTest {
   }
 }
 
-export class RealErpDriverTest extends BaseErpDriverTest {
+export class RealGithubDriverTest extends BaseErpDriverTest {
   private driver;
 
   constructor() {
     super();
-    this.driver = new RealErpDriver();
+    this.driver = new RealGithubDriver();
   }
 
   public createErpDriver() {
-    const driver = new RealErpDriver();
+    const driver = new RealGithubDriver();
 
     driver.setup(this.getVersionUrl());
 

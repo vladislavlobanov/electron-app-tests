@@ -6,8 +6,8 @@ import Modal from "../../utils/DSL/modal";
 import MenuBar from "../../utils/DSL/menuBar";
 
 import { WireMock } from "wiremock-captain";
-import { ErpStubDriver } from "../../utils/drivers/ErpStubDriver";
-import { ErpStubDsl } from "../../utils/DSL/ErpStubDsl";
+import { GithubStubDriver } from "../../utils/drivers/GithubStubDriver";
+import { GithubStubDsl } from "../../utils/DSL/GithubStubDsl";
 
 //Seeing Persisting Query History should run first
 
@@ -444,8 +444,8 @@ describe("Select Theme", async () => {
 describe("Version", async () => {
   let mainPage: MainPage;
 
-  const erp = new ErpStubDsl(
-    new ErpStubDriver(
+  const erp = new GithubStubDsl(
+    new GithubStubDriver(
       new WireMock(`${process.env.WIREMOCK_HOST}:${process.env.WIREMOCK_PORT}`)
     )
   );

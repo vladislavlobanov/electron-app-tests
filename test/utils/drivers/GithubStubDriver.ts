@@ -7,9 +7,9 @@ import {
 } from "wiremock-captain";
 import * as semver from "semver";
 
-import { ErpDriver } from "../types";
+import type { GithubDriver } from "../types";
 
-class BaseErpDriver implements ErpDriver {
+class BaseErpDriver implements GithubDriver {
   private client: string = "";
 
   constructor() {}
@@ -33,7 +33,7 @@ class BaseErpDriver implements ErpDriver {
   public async willReturnLowerVersion() {}
 }
 
-export class ErpStubDriver extends BaseErpDriver {
+export class GithubStubDriver extends BaseErpDriver {
   private driver: WireMock;
 
   private versionRequest: IWireMockRequest = {
@@ -75,7 +75,7 @@ export class ErpStubDriver extends BaseErpDriver {
   }
 }
 
-export class RealErpDriver extends BaseErpDriver {
+export class RealGithubDriver extends BaseErpDriver {
   constructor() {
     super();
   }

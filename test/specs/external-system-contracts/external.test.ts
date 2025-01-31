@@ -1,9 +1,9 @@
 import { browser } from "wdio-electron-service";
 
 import {
-  ErpStubDriverTest,
-  RealErpDriverTest,
-} from "../../utils/helpers/erpHelpers";
+  GithubStubDriverTest,
+  RealGithubDriverTest,
+} from "../../utils/helpers/GithubHelpers";
 
 describe("External System Contracts Test", () => {
   it("should check that application theme corresponds to the OS theme", async () => {
@@ -18,7 +18,7 @@ describe("External System Contracts Test", () => {
 });
 
 describe("External System Stub Contract Test. Github API", async () => {
-  const erpStub = new ErpStubDriverTest();
+  const erpStub = new GithubStubDriverTest();
 
   it("should successfully check that higher version exist", async () => {
     await erpStub.shouldReturnHigherVersion("1.0.0");
@@ -30,7 +30,7 @@ describe("External System Stub Contract Test. Github API", async () => {
 });
 
 describe("External System Test Instance Contract Test. Github API", async () => {
-  const erpReal = new RealErpDriverTest();
+  const erpReal = new RealGithubDriverTest();
 
   it("should successfully check version against stub", async () => {
     await erpReal.shouldReturnActualVersion();
