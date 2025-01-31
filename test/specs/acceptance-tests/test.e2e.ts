@@ -439,6 +439,8 @@ describe("Select Theme", async () => {
   });
 });
 
+//Maintainable Acceptance Test start
+
 describe("Version", async () => {
   let mainPage: MainPage;
 
@@ -456,5 +458,54 @@ describe("Version", async () => {
     const appVersion = await erp.getVersion();
 
     await expect(appVersion).toBeDefined();
+  });
+});
+
+//Maintainable Acceptance Test end
+
+describe.skip("Advanced View Startup Preference", async () => {
+  it("should enable Advanced View on startup", async () => {
+    await browser.reloadSession();
+
+    const mainPage = new MainPage();
+
+    const settingsModal = new Modal();
+
+    const appMenu = new MenuBar("MongoDB Query Executor");
+
+    const appMenuExists = await appMenu.doesAppMenuExist();
+
+    assert.equal(
+      appMenuExists,
+      true,
+      "MongoDB Query Executor menu item exists"
+    );
+
+    const successfulClickOnAppMenu = await appMenu.doMenuClickById("appName");
+
+    assert.equal(
+      successfulClickOnAppMenu,
+      true,
+      "Click on MongoDB Query Executor"
+    );
+
+    const successfulClickOnSettingMenu = await appMenu.doMenuClickById(
+      "settings"
+    );
+
+    assert.equal(successfulClickOnSettingMenu, true, "Click on Settings");
+
+    const settingsModalVisible = await settingsModal.modal;
+
+    await expect(settingsModalVisible).toBeDisplayed();
+
+    await settingsModal.clickAdvancedViewOnStartCheckbox();
+    await settingsModal.clickApplyButton();
+
+    await browser.reloadSession();
+
+    const queryHistoryResults = await mainPage.queryHistoryResults;
+
+    await expect(queryHistoryResults).toBeDisabled();
   });
 });
