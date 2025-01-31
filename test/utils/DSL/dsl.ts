@@ -1,4 +1,5 @@
-import { AllChannels, AppDriver, Channels } from "../types";
+import { Channels } from "../const";
+import type { AllChannels, AppDriver } from "../types";
 import { UIAppDriver } from "../drivers/UI";
 import { APIAppDriver } from "../drivers/API";
 
