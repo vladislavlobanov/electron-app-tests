@@ -1,7 +1,9 @@
 import { browser } from "wdio-electron-service";
-import * as semver from "semver";
 
-import { ErpStubTest, RealErpTest } from "../../utils/drivers/baseStubDriver";
+import {
+  ErpStubDriverTest,
+  RealErpDriverTest,
+} from "../../utils/helpers/erpHelpers";
 
 describe("External System Contracts Test", () => {
   it("should check that application theme corresponds to the OS theme", async () => {
@@ -16,25 +18,21 @@ describe("External System Contracts Test", () => {
 });
 
 describe("External System Stub Contract Test. Github API", async () => {
-  const erpStub = new ErpStubTest();
+  const erpStub = new ErpStubDriverTest();
 
-  it("should successfully check version against stub", async () => {
-    const version = await erpStub.getVersion();
+  it("should successfully check that higher version exist", async () => {
+    await erpStub.shouldReturnHigherVersion("1.0.0");
+  });
 
-    const stubVersion = semver.clean(version);
-
-    await expect(stubVersion).toBe("10.0.0");
+  it("should successfully check that lower version exist", async () => {
+    await erpStub.shouldReturnLowerVersion("1.0.0");
   });
 });
 
 describe("External System Test Instance Contract Test. Github API", async () => {
-  const erpReal = new RealErpTest();
+  const erpReal = new RealErpDriverTest();
 
   it("should successfully check version against stub", async () => {
-    const version = await erpReal.getVersion();
-
-    const stubVersion = semver.clean(version);
-
-    await expect(stubVersion).toBe("1.0.29");
+    await erpReal.shouldReturnActualVersion();
   });
 });

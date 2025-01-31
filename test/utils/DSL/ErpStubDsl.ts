@@ -17,4 +17,12 @@ export class ErpStubDsl implements ErpStubDriverInterface {
   public async getVersion() {
     return this.driver.getVersion();
   }
+
+  public async willReturnHigherVersion() {
+    await this.driver.willReturnHigherVersion();
+  }
+
+  public async willReturnLowerVersion() {
+    await this.driver.willReturnLowerVersion();
+  }
 }
