@@ -30,14 +30,14 @@ abstract class BaseErpDriverTest {
     assert.exists(semver.clean(data.tag_name));
   }
 
-  public async shouldReturnHigherVersion(version: string) {
+  public async shouldReturnHigherVersionThanCurrent(currentAppVersion: string) {
     this.setupHigherVersion();
-    this.erpDriver.shouldHaveHigherVersion(version);
+    this.erpDriver.shouldHaveHigherVersion(currentAppVersion);
   }
 
-  public async shouldReturnLowerVersion(version: string) {
+  public async shouldReturnLowerVersionThanCurrent(currentAppVersion: string) {
     this.setupLowerVersion();
-    this.erpDriver.shouldHaveLowerVersion(version);
+    this.erpDriver.shouldHaveLowerVersion(currentAppVersion);
   }
 }
 

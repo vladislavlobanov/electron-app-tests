@@ -21,11 +21,11 @@ describe("External System Stub Contract Test. Github API", async () => {
   const erpStub = new GithubStubDriverTest();
 
   it("should successfully check that higher version exist", async () => {
-    await erpStub.shouldReturnHigherVersion("1.0.0");
+    await erpStub.shouldReturnHigherVersionThanCurrent("1.0.0");
   });
 
   it("should successfully check that lower version exist", async () => {
-    await erpStub.shouldReturnLowerVersion("1.0.0");
+    await erpStub.shouldReturnLowerVersionThanCurrent("1.0.0");
   });
 });
 
