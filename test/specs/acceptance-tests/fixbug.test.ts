@@ -1,11 +1,16 @@
-import { AppDrivers } from "../../utils/DSL/dsl";
-import { WireMock } from "wiremock-captain";
-import { ThemeStubDsl } from "../../utils/DSL/ThemeStubDsl";
-import { RealThemeDriver } from "../../utils/drivers/ThemeStubDriver";
-import Modal from "../../../../../../../Project/3t.tools.intellij/mongo/electron-app-tests/test/utils/DSL/modal";
-import MenuBar from "../../../../../../../Project/3t.tools.intellij/mongo/electron-app-tests/test/utils/DSL/menuBar";
 import { assert } from "chai";
-import MainPage from "../../../../../../../Project/3t.tools.intellij/mongo/electron-app-tests/test/utils/DSL/mainPage";
+import { browser } from "wdio-electron-service";
+
+import MainPage from "../../utils/DSL/mainPage";
+import Modal from "../../utils/DSL/modal";
+import MenuBar from "../../utils/DSL/menuBar";
+
+import { WireMock } from "wiremock-captain";
+import { ThemeStubDriver } from "../../utils/drivers/ThemeStubDriver";
+import { RealThemeDriver } from "../../utils/drivers/ThemeStubDriver";
+import { ThemeStubDsl } from "../../utils/DSL/ThemeStubDsl";
+
+import { AppDsl, AppDrivers } from "../../utils/DSL/dsl";
 
 
 describe("Theme Change Acceptance Test", async () => {
