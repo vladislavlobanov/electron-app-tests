@@ -38,3 +38,23 @@ export class AppDrivers implements AppDriver {
     return this.driver.getQueryResult();
   }
 }
+
+export class AppDsl {
+  private driver: AppDrivers;
+
+  constructor(driver: AppDrivers) {
+    this.driver = driver;
+  }
+
+  public async setQuery(query: string) {
+    await this.driver.setQuery(query);
+  }
+
+  public async clickRunQuery() {
+    await this.driver.clickRunQuery();
+  }
+
+  public async getQueryResult() {
+    return this.driver.getQueryResult();
+  }
+}
