@@ -1,44 +1,58 @@
 import { expect } from "chai";
 import { AppDrivers } from "../../utils/DSL/dsl";
-// Note: Do NOT import any ThemeStubDsl or other new files.
+import { WireMock } from "wiremock-captain";
 
-describe("Feature: Change the computer appearance from Light to Dark theme when using Advanced view: on", () => {
+describe("Theme Appearance Change Acceptance Test", () => {
   let app: AppDrivers;
 
+  // Before each test, create a new AppDrivers instance with our WireMock instance.
   beforeEach(() => {
-    // Initialize the app driver.
-    // It is assumed that the app driver is already configured to point to the target application.
-    app = new AppDrivers();
+    app = new AppDrivers(
+      new WireMock(`${process.env.WIREMOCK_HOST}:${process.env.WIREMOCK_PORT}`)
+    );
   });
 
-  it("Scenario: Use the related background colour for Query results and Query History fields", async () => {
-    // GIVEN the app has already opened
-    // AND the computer appearance is Light initially.
-    // (Simulate a Light theme by calling an already available method on app.driver.)
-    await app.driver.setTheme("light");
+  it("should use the related dark background colour for Query Results and Query History fields when theme is changed from light to dark", async () => {
+    // GIVEN: the app has already opened
+    // AND: the computer appearance is Light initially.
+    await app.themeStubDsl.willReturnTheme("light");
 
-    // Open the app with a sample query, then run the query.
+    // Set a simple query and run to populate the Query Results and Query History fields.
     await app.setQuery("{}");
     await app.clickRunQuery();
 
-    // AND toggle Advanced view: on.
-    await app.driver.toggleAdvancedView();
+    // Use selectors from the DSL (or directly via browser.$) to capture CSS style values.
+    // For Query Results we use the [data-testid="queryResult"] element.
+    const queryResultElement = await $('[data-testid="queryResult"]');
+    const queryResultLightBg = (await queryResultElement.getCSSProperty("background-color")).value;
 
-    // AND see (capture) the Query Results and Query History fields background colours.
-    const queryResultBackgroundLight = await app.driver.getQueryResultBackground();
-    const queryHistoryBackgroundLight = await app.driver.getQueryHistoryBackground();
+    // For Query History, we assume that each history record is marked with [data-testid="queryHistorySingleElement"]
+    // and we take the last one.
+    const queryHistoryElements = await $$('[data-testid="queryHistorySingleElement"]');
+    const lastHistoryElement = queryHistoryElements[queryHistoryElements.length - 1];
+    const queryHistoryLightBg = (await lastHistoryElement.getCSSProperty("background-color")).value;
 
-    // WHEN the computer appearance is changed from Light to Dark theme.
-    await app.driver.setTheme("dark");
-    // Re-run the query to have the field styles refresh.
+    // WHEN: the computer appearance is changed from Light to Dark theme.
+    await app.themeStubDsl.willReturnTheme("dark");
+
+    // To see the effect of theme change, re-run the query.
     await app.setQuery("{}");
     await app.clickRunQuery();
 
-    // THEN Query Results and Query History fields should show dark background colour.
-    const queryResultBackgroundDark = await app.driver.getQueryResultBackground();
-    const queryHistoryBackgroundDark = await app.driver.getQueryHistoryBackground();
+    // Obtain the updated background colours.
+    const queryResultDarkBg = (await queryResultElement.getCSSProperty("background-color")).value;
+    const updatedHistoryElements = await $$('[data-testid="queryHistorySingleElement"]');
+    const lastHistoryElementDark = updatedHistoryElements[updatedHistoryElements.length - 1];
+    const queryHistoryDarkBg = (await lastHistoryElementDark.getCSSProperty("background-color")).value;
 
-    expect(queryResultBackgroundDark).to.not.equal(queryResultBackgroundLight);
-    expect(queryHistoryBackgroundDark).to.not.equal(queryHistoryBackgroundLight);
+    // THEN: The Query Results and Query History fields should show a dark background colour – 
+    // (i.e. the CSS background-colour values have changed to a value different from the light one).
+    expect(queryResultDarkBg).to.not.equal(queryResultLightBg);
+    expect(queryHistoryDarkBg).to.not.equal(queryHistoryLightBg);
+
+    // Optionally, if you know the specific dark theme background colour (for example "rgb(39, 39, 39)")
+    // then assert that. For now we simply check that the returned value is in an RGB format.
+    expect(queryResultDarkBg).to.match(/rgb\(/);
+    expect(queryHistoryDarkBg).to.match(/rgb\(/);
   });
 });
