@@ -1,14 +1,22 @@
 import { Channels } from "../const";
-import type { AllChannels, AppDriver } from "../types";
+import type { AppDriver } from "../types";
 import { UIAppDriver } from "../drivers/UI";
 import { APIAppDriver } from "../drivers/API";
+import { ThemeStubDsl } from "./ThemeStubDsl";
+import { WireMock } from "wiremock-captain";
+import { ThemeStubDriver } from "../drivers/ThemeStubDriver";
 
+/**
+ * AppDrivers manages different drivers based on communication channels.
+ */
 export class AppDrivers implements AppDriver {
   private drivers = {} as Record<Channels, AppDriver>;
+  public themeStubDsl: ThemeStubDsl;
 
-  constructor(channels: Array<AllChannels>) {
-    this.drivers[Channels.UI] = new APIAppDriver();
-    this.drivers[Channels.API] = new UIAppDriver();
+  constructor(wireMock: WireMock) {
+    this.drivers[Channels.UI] = new UIAppDriver();
+    this.drivers[Channels.API] = new APIAppDriver();
+    this.themeStubDsl = new ThemeStubDsl(new ThemeStubDriver(wireMock));
   }
 
   get driver() {
