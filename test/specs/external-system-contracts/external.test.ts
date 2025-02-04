@@ -17,9 +17,7 @@ describe("External System Contracts Test", () => {
   });
 });
 
-//From External Systsems -> Version test uses DSL-Four Layer Model. Here we use the stub
-// because GitHub has API limitations and we reach the limit of checking the version quite quckly.
-// We understand that in real life this should be a proper API call, not a mock
+//From External Systsems -> Version test uses DSL-Four Layer Model
 
 describe("External System Stub Contract Test. Github API", async () => {
   const githubStub = new GithubStubDriverTest();
@@ -32,6 +30,9 @@ describe("External System Stub Contract Test. Github API", async () => {
     await githubStub.shouldReturnLowerVersionThanCurrent("1.0.0");
   });
 });
+
+// Here we use Nock because GitHub has API limitations and we reach the limit of checking the version quite quckly.
+// We understand that in real life this should be a proper API call, not a mock
 
 describe("External System Test Instance Contract Test. Github API", async () => {
   const githubReal = new RealGithubDriverTest();
