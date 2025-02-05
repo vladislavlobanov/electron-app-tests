@@ -12,8 +12,10 @@ export async function cleanQueriesTable(): Promise<void> {
     return;
   }
   const sqlite3 = sqlite3Module.default || sqlite3Module;
+  // Go up five levels then into my-electron-app/backend/localStorage/app.db
   const dbPath = join(
     __dirname,
+    "..",
     "..",
     "..",
     "..",
