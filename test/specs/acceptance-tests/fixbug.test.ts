@@ -30,6 +30,7 @@ describe("Theme Change Acceptance Test", async () => {
 
   beforeEach(async () => {
     app = new AppDrivers(wireMock);
+    // Use the real theme driver so that system theme can be set.
     themeStub = new ThemeStubDsl(new RealThemeDriver(wireMock));
     appMenu = new MenuBar("MongoDB Query Executor");
     settingsModal = new Modal();

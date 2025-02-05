@@ -1,7 +1,13 @@
 import { join } from "path";
 
 export async function cleanQueriesTable(): Promise<void> {
-  const sqlite3Module = await import("sqlite3");
+  let sqlite3Module;
+  try {
+    sqlite3Module = await import("sqlite3");
+  } catch (e) {
+    console.warn("Warning: sqlite3 module not found; skipping queries table cleanup.");
+    return;
+  }
   const sqlite3 = sqlite3Module.default || sqlite3Module;
   const dbPath = join(__dirname, "..", "..", "..", "..", "my-electron-app", "backend", "localStorage", "app.db");
   await new Promise((resolve, reject) => {
