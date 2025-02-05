@@ -119,7 +119,13 @@ export class MainPage {
 
   async getRealThemeVersionFromGithub() {
     const response = await fetch(
-      "https://api.github.com/repos/vaisakhsasikumar/my-electron-app/releases/latest"
+      "https://api.github.com/repos/vaisakhsasikumar/my-electron-app/releases/latest",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.GITHUB_TOKEN as string}`,
+        },
+      }
     );
     return response;
   }

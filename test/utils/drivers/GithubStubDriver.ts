@@ -79,16 +79,4 @@ export class RealGithubDriver extends BaseErpDriver {
   constructor() {
     super();
   }
-
-  public async willReturnHigherVersion() {
-    nock("https://api.github.com")
-      .get("/repos/vaisakhsasikumar/my-electron-app/releases/latest")
-      .reply(200, { tag_name: "v100.0.0" });
-  }
-
-  public async willReturnLowerVersion() {
-    nock("https://api.github.com")
-      .get("/repos/vaisakhsasikumar/my-electron-app/releases/latest")
-      .reply(200, { tag_name: "v0.0.01" });
-  }
 }
