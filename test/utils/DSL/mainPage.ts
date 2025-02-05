@@ -123,7 +123,9 @@ export class MainPage {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.GITHUB_TOKEN as string}`,
+          ...(process.env.GITHUB_TOKEN
+            ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN as string}` }
+            : {}),
         },
       }
     );

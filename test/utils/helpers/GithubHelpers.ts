@@ -23,7 +23,14 @@ abstract class BaseGithubDriverTest {
   }
 
   public async shouldReturnActualVersion() {
-    const response = await fetch(this.getVersionUrl());
+    const response = await fetch(this.getVersionUrl(), {
+      headers: {
+        "Content-Type": "application/json",
+        ...(process.env.GITHUB_TOKEN
+          ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN as string}` }
+          : {}),
+      },
+    });
 
     const data = await response.json();
 
