@@ -127,6 +127,7 @@ export class MainPage {
             ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN as string}` }
             : {}),
         },
+      }
     );
     return response;
   }
