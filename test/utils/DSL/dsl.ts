@@ -15,7 +15,7 @@ export class AppDrivers implements AppDriver {
 
   constructor(wireMock: WireMock) {
     this.drivers[Channels.UI] = new UIAppDriver();
-    this.drivers[Channels.API] = new APIAppDriver();
+    // this.drivers[Channels.API] = new APIAppDriver();
     this.themeStubDsl = new ThemeStubDsl(new ThemeStubDriver(wireMock));
   }
 
@@ -37,6 +37,30 @@ export class AppDrivers implements AppDriver {
   public async getQueryResult() {
     return this.driver.getQueryResult();
   }
+
+  public async toggleAdvancedView() {
+    await this.driver.toggleAdvancedView();
+  }
+
+  public getQueryHistoryResults() {
+    return this.driver.getQueryHistoryResults();
+  }
+
+  public async getLastQueryFromHistory() {
+    return this.driver.getLastQueryFromHistory();
+  }
+
+  public async clickRandomItemInHistory() {
+    await this.driver.clickRandomItemInHistory();
+  }
+
+  public getQueryHistoryResultsContainer() {
+    return this.driver.getQueryHistoryResultsContainer();
+  }
+
+  public async getAdvancedViewToggleValue() {
+    return this.driver.getAdvancedViewToggleValue();
+  }
 }
 
 export class AppDsl {
@@ -56,5 +80,34 @@ export class AppDsl {
 
   public async getQueryResult() {
     return this.driver.getQueryResult();
+  }
+
+  public async toggleAdvancedView() {
+    await this.driver.toggleAdvancedView();
+  }
+
+  public async getQueryHistoryResults() {
+    return this.driver.getQueryHistoryResults();
+  }
+
+  public async getQueryHistoryResultsLenght() {
+    const history = await this.driver.getQueryHistoryResults();
+    return history.length;
+  }
+
+  public async getLastQueryFromHistory() {
+    return this.driver.getLastQueryFromHistory();
+  }
+
+  public async clickRandomItemInHistory() {
+    await this.driver.clickRandomItemInHistory();
+  }
+
+  public async getQueryHistoryResultsContainer() {
+    return this.driver.getQueryHistoryResultsContainer();
+  }
+
+  public async getAdvancedViewToggleValue() {
+    return this.driver.getAdvancedViewToggleValue();
   }
 }

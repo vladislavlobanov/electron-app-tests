@@ -28,4 +28,28 @@ export class UIAppDriver implements AppDriver {
   public async getQueryResult() {
     return this.mainPage.getQueryResultText();
   }
+
+  public async toggleAdvancedView() {
+    await this.mainPage.toggleAdvancedView();
+  }
+
+  public async getQueryHistoryResults() {
+    return this.mainPage.queryHistoryResultsAllElements;
+  }
+
+  public async getLastQueryFromHistory() {
+    return this.mainPage.getLastQueryHistoryText();
+  }
+
+  public async clickRandomItemInHistory() {
+    await this.mainPage.clickRandomItemInHistory();
+  }
+
+  public async getQueryHistoryResultsContainer() {
+    return this.mainPage.queryHistoryResults;
+  }
+
+  public async getAdvancedViewToggleValue() {
+    return this.mainPage.getToggleValue();
+  }
 }
