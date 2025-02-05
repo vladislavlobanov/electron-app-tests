@@ -11,6 +11,11 @@ export interface AppDriver {
   clickRandomItemInHistory: () => Promise<void>;
   getQueryHistoryResultsContainer: () => Promise<WebdriverIO.Element>;
   getAdvancedViewToggleValue: () => Promise<boolean>;
+
+  checkAppMenuExist: () => Promise<boolean>;
+  clickOnMenuItem: (menuId: string) => Promise<void>;
+  checkMenuItems: () => Promise<boolean>;
+  getModalContainer: () => Promise<WebdriverIO.Element>;
 }
 
 export interface GithubDriver {
