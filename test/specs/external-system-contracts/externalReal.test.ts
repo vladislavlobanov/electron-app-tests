@@ -6,9 +6,9 @@ import { RealGithubDriverTest } from "../../utils/helpers/GithubHelpers";
 // We understand that in real life this should be a proper API call, not a mock
 
 describe("External System Test Instance Contract Test. Github API", async () => {
-  const githubReal = new RealGithubDriverTest();
+  const githubRealTest = new RealGithubDriverTest();
 
   it("should successfully check version against stub", async () => {
-    await githubReal.shouldReturnActualVersion();
+    await githubRealTest.shouldReturnActualVersion();
   });
 });
