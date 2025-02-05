@@ -1,6 +1,6 @@
 import { browser } from "wdio-electron-service";
 
-import { RealGithubDriverTest } from "../../utils/helpers/GithubHelpers";
+import { RealGithubDriverTest } from "./helpers/GithubHelpers";
 
 // Here we use Nock because GitHub has API limitations and we reach the limit of checking the version quite quckly.
 // We understand that in real life this should be a proper API call, not a mock

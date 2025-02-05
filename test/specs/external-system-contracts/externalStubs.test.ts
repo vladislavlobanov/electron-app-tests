@@ -1,6 +1,6 @@
 import { browser } from "wdio-electron-service";
 
-import { GithubStubDriverTest } from "../../utils/helpers/GithubHelpers";
+import { GithubStubDriverTest } from "./helpers/GithubHelpers";
 
 //From External Systsems -> Version test uses DSL-Four Layer Model
 
