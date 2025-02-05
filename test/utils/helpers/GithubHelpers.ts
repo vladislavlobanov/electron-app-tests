@@ -89,16 +89,9 @@ export class RealGithubDriverTest extends BaseGithubDriverTest {
   }
 
   public getVersionUrl() {
-    nock("https://api.github.com")
-      .get("/repos/vaisakhsasikumar/my-electron-app/releases/latest")
-      .reply(200, { tag_name: "v1.0.0" });
     return "https://api.github.com/repos/vaisakhsasikumar/my-electron-app/releases/latest";
   }
 
-  public async setupHigherVersion() {
-    this.driver.willReturnHigherVersion();
-  }
-  public async setupLowerVersion() {
-    this.driver.willReturnLowerVersion();
-  }
+  public async setupHigherVersion() {}
+  public async setupLowerVersion() {}
 }
