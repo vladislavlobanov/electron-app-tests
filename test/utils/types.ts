@@ -26,6 +26,11 @@ export interface GithubDriver {
   shouldHaveLowerVersion: (version: string) => Promise<void>;
 }
 
+export interface ThemeDriver {
+  shouldHaveLightTheme: () => Promise<void>;
+  shouldHaveDarkTheme: () => Promise<void>;
+}
+
 export type AllChannels = keyof typeof Channels;
 
 export type Theme = keyof typeof THEME;

@@ -50,6 +50,10 @@ export class UIAppDriver implements AppDriver {
     return this.mainPage.queryHistoryResults;
   }
 
+  public async getQueryResultContainer() {
+    return this.mainPage.queryResultContainer;
+  }
+
   public async getAdvancedViewToggleValue() {
     return this.mainPage.getToggleValue();
   }

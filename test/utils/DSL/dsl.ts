@@ -2,9 +2,6 @@ import { Channels, THEME } from "../const";
 import type { AppDriver } from "../types";
 import { UIAppDriver } from "../drivers/UI";
 import { APIAppDriver } from "../drivers/API";
-import { ThemeStubDsl } from "./ThemeStubDsl";
-import { WireMock } from "wiremock-captain";
-import { ThemeStubDriver } from "../drivers/ThemeStubDriver";
 import { assert } from "chai";
 
 /**
@@ -15,12 +12,10 @@ export class AppDrivers implements AppDriver {
     [Channels.UI]: UIAppDriver;
     [Channels.API]: APIAppDriver;
   };
-  public themeStubDsl: ThemeStubDsl;
 
-  constructor(wireMock: WireMock) {
+  constructor(channels: Array<Channels>) {
     this.drivers[Channels.UI] = new UIAppDriver();
     this.drivers[Channels.API] = new APIAppDriver();
-    this.themeStubDsl = new ThemeStubDsl(new ThemeStubDriver(wireMock));
   }
 
   get driver() {
@@ -58,8 +53,12 @@ export class AppDrivers implements AppDriver {
     await this.driver.clickRandomItemInHistory();
   }
 
-  public getQueryHistoryResultsContainer() {
+  public async getQueryHistoryResultsContainer() {
     return this.driver.getQueryHistoryResultsContainer();
+  }
+
+  public async getQueryResultContainer() {
+    return this.driver.getQueryResultContainer();
   }
 
   public async getAdvancedViewToggleValue() {
@@ -168,6 +167,10 @@ export class AppDsl {
 
   public async getQueryHistoryResultsContainer() {
     return this.driver.getQueryHistoryResultsContainer();
+  }
+
+  public async getQueryResultContainer() {
+    return this.driver.getQueryResultContainer();
   }
 
   public async getAdvancedViewToggleValue() {
@@ -306,5 +309,16 @@ export class AppDsl {
         "The root element incorrectly has the 'dark-theme' class when it should not."
       );
     }
+  }
+
+  public async checkApplicationElementHasExpectedBackgroundColor(
+    element: WebdriverIO.Element,
+    backgroundColor: string
+  ) {
+    const elementBackgroundColor = await element.getCSSProperty(
+      "background-color"
+    );
+
+    assert.equal(elementBackgroundColor.value, backgroundColor);
   }
 }
