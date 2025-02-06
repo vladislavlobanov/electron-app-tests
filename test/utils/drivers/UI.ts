@@ -4,6 +4,7 @@ import { AppDriver } from "../types";
 import MainPage from "../DSL/mainPage";
 import Modal from "../DSL/modal";
 import MenuBar from "../DSL/menuBar";
+import { THEME } from "../const";
 
 export class UIAppDriver implements AppDriver {
   private driver: WebdriverIO.Browser = browser;
@@ -57,7 +58,7 @@ export class UIAppDriver implements AppDriver {
     await this.menuBar.doMenuClickById(menuId);
   }
   public async checkAppMenuExist() {
-    return await this.menuBar.doesAppMenuExist();
+    return this.menuBar.doesAppMenuExist();
   }
 
   public async checkMenuItems() {
@@ -91,10 +92,24 @@ export class UIAppDriver implements AppDriver {
   public async getCollectionNameInputContainer() {
     return this.settingsModal.collectionNameInput;
   }
+
   public async getApplySettingsButtonContainer() {
     return this.settingsModal.applyButton;
   }
+
   public async getCancelSettingsButtonContainer() {
     return this.settingsModal.cancelButton;
+  }
+
+  public async selectApplicationTheme(theme: THEME) {
+    await this.settingsModal.selectTheme(theme);
+  }
+
+  public async clickCancelSettings() {
+    await this.settingsModal.clickCancelButton();
+  }
+
+  public async clickApplySettings() {
+    await this.settingsModal.clickApplyButton();
   }
 }

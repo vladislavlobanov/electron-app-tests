@@ -1,15 +1,11 @@
 import { assert } from "chai";
+import { WireMock } from "wiremock-captain";
 import { browser } from "wdio-electron-service";
 
-import MainPage from "../../utils/DSL/mainPage";
-import Modal from "../../utils/DSL/modal";
-import MenuBar from "../../utils/DSL/menuBar";
-
-import { WireMock } from "wiremock-captain";
-import { GithubStubDriver } from "../../utils/drivers/GithubStubDriver";
-import { GithubStubDsl } from "../../utils/DSL/GithubStubDsl";
-
 import { AppDsl, AppDrivers } from "../../utils/DSL/dsl";
+import { GithubStubDsl } from "../../utils/DSL/GithubStubDsl";
+import { GithubStubDriver } from "../../utils/drivers/GithubStubDriver";
+import { THEME } from "../../utils/const";
 
 //Seeing Persisting Query History should run first
 describe("Seeing Persisting Query History", async () => {
@@ -34,13 +30,7 @@ describe("Seeing Persisting Query History", async () => {
     await application.setQuery(`{"name":"test1"}`);
     await application.clickRunQuery();
     historyList = await application.getQueryHistoryResults();
-    console.log(
-      "TEST LOGS",
-      historyList.length,
-      initialHistoryLength + 1,
-      typeof historyList,
-      typeof initialHistoryLength
-    );
+
     await expect(historyList).toBeElementsArrayOfSize(initialHistoryLength + 1);
 
     await application.setQuery(`{"name":"test2"}`);
@@ -259,6 +249,10 @@ describe("Settings", async () => {
 describe("MongoDB Query Execution Test", async () => {
   const application = new AppDsl(new AppDrivers(["UI", "API"]));
 
+  beforeEach(async () => {
+    await browser.reloadSession();
+  });
+
   it("should execute a simple query and display results", async () => {
     await application.setQuery("{}");
     await application.clickRunQuery();
@@ -291,109 +285,48 @@ describe("MongoDB Query Execution Test", async () => {
 // Theme selection follows DSL but not Four Layer Model due to technical limitations.
 
 describe("Select Theme", async () => {
-  let appMenu: MenuBar;
-  let settingsModal: Modal;
+  const application = new AppDsl(new AppDrivers(["UI", "API"]));
 
-  beforeEach(() => {
-    appMenu = new MenuBar("MongoDB Query Executor");
-    settingsModal = new Modal();
+  beforeEach(async () => {
+    await browser.reloadSession();
   });
 
   it("should show the default Theme", async () => {
-    await browser.reloadSession();
+    await application.checkAppMenuExist();
 
-    const appMenuExists = await appMenu.doesAppMenuExist();
+    await application.clickOnAppMenu();
 
-    assert.equal(
-      appMenuExists,
-      true,
-      "MongoDB Query Executor menu item exists"
-    );
+    await application.clickOnSettingsMenu();
 
-    const successfulClickOnAppMenu = await appMenu.doMenuClickById("appName");
-
-    assert.equal(
-      successfulClickOnAppMenu,
-      true,
-      "Click on MongoDB Query Executor"
-    );
-
-    const successfulClickOnSettingMenu = await appMenu.doMenuClickById(
-      "settings"
-    );
-
-    assert.equal(successfulClickOnSettingMenu, true, "Click on Settings");
-
-    const systemThemeRadio = await settingsModal.systemThemeRadio;
-    await expect(systemThemeRadio).toBeChecked();
+    await application.checkDefaultTheme();
   });
 
   it("should click the Cancel button", async () => {
-    await browser.reloadSession();
+    await application.checkAppMenuExist();
 
-    const successfulClickOnSettingMenu = await appMenu.doMenuClickById(
-      "settings"
-    );
+    await application.clickOnAppMenu();
 
-    assert.equal(successfulClickOnSettingMenu, true, "Click on Settings");
+    await application.clickOnSettingsMenu();
 
-    await settingsModal.selectTheme("dark");
+    await application.selectApplicationTheme(THEME.DARK);
 
-    await settingsModal.clickCancelButton();
+    await application.clickCancelSettings();
 
-    const theme = process.env.WDIO_THEME;
-
-    const rootClassList = await browser.$("html").getAttribute("class");
-
-    if (theme === "dark") {
-      assert.include(
-        rootClassList,
-        "dark-theme",
-        "The root element does not have the 'dark-theme' class as expected."
-      );
-      assert.notInclude(
-        rootClassList,
-        "light-theme",
-        "The root element incorrectly has the 'light-theme' class when it should not."
-      );
-    } else {
-      assert.include(
-        rootClassList,
-        "light-theme",
-        "The root element does not have the 'light-theme' class as expected."
-      );
-      assert.notInclude(
-        rootClassList,
-        "dark-theme",
-        "The root element incorrectly has the 'dark-theme' class when it should not."
-      );
-    }
+    await application.checkApplicationHasTheme(THEME.SYSTEM);
   });
 
   it("should click the Apply button", async () => {
-    await browser.reloadSession();
+    await application.checkAppMenuExist();
 
-    const successfulClickOnSettingMenu = await appMenu.doMenuClickById(
-      "settings"
-    );
-    assert.equal(successfulClickOnSettingMenu, true, "Click on Settings");
+    await application.clickOnAppMenu();
 
-    await settingsModal.selectTheme("dark");
+    await application.clickOnSettingsMenu();
 
-    await settingsModal.clickApplyButton();
+    await application.selectApplicationTheme(THEME.DARK);
 
-    const rootClassList = await browser.$("html").getAttribute("class");
+    await application.clickApplySettings();
 
-    assert.include(
-      rootClassList,
-      "dark-theme",
-      "The root element does not have the 'dark-theme' class as expected."
-    );
-    assert.notInclude(
-      rootClassList,
-      "light-theme",
-      "The root element incorrectly has the 'light-theme' class when it should not."
-    );
+    await application.checkApplicationHasTheme(THEME.DARK);
   });
 });
 

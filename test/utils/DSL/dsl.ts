@@ -1,4 +1,4 @@
-import { Channels } from "../const";
+import { Channels, THEME } from "../const";
 import type { AppDriver } from "../types";
 import { UIAppDriver } from "../drivers/UI";
 import { APIAppDriver } from "../drivers/API";
@@ -111,6 +111,18 @@ export class AppDrivers implements AppDriver {
 
   public async getCancelSettingsButton() {
     return this.driver.getCancelSettingsButtonContainer();
+  }
+
+  public async selectApplicationTheme(theme: THEME) {
+    await this.driver.selectApplicationTheme(theme);
+  }
+
+  public async clickCancelSettings() {
+    await this.driver.clickCancelSettings();
+  }
+
+  public async clickApplySettings() {
+    await this.driver.clickApplySettings();
   }
 }
 
@@ -254,5 +266,45 @@ export class AppDsl {
   public async checkDefaultCollectionName() {
     const collectionNameInput = await this.driver.getCollectionNameInput();
     await expect(collectionNameInput).toHaveValue("test");
+  }
+
+  public async selectApplicationTheme(theme: THEME) {
+    await this.driver.selectApplicationTheme(theme);
+  }
+
+  public async clickApplySettings() {
+    await this.driver.clickApplySettings();
+  }
+
+  public async clickCancelSettings() {
+    await this.driver.clickCancelSettings();
+  }
+
+  public async checkApplicationHasTheme(theme: THEME) {
+    const rootClassList = await browser.$("html").getAttribute("class");
+
+    if (theme === "dark") {
+      assert.include(
+        rootClassList,
+        "dark-theme",
+        "The root element does not have the 'dark-theme' class as expected."
+      );
+      assert.notInclude(
+        rootClassList,
+        "light-theme",
+        "The root element incorrectly has the 'light-theme' class when it should not."
+      );
+    } else {
+      assert.include(
+        rootClassList,
+        "light-theme",
+        "The root element does not have the 'light-theme' class as expected."
+      );
+      assert.notInclude(
+        rootClassList,
+        "dark-theme",
+        "The root element incorrectly has the 'dark-theme' class when it should not."
+      );
+    }
   }
 }

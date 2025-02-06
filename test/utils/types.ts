@@ -1,4 +1,4 @@
-import { Channels } from "./const";
+import { Channels, THEME } from "./const";
 
 export interface AppDriver {
   setQuery: (query: string) => Promise<void>;
@@ -27,3 +27,5 @@ export interface GithubDriver {
 }
 
 export type AllChannels = keyof typeof Channels;
+
+export type Theme = keyof typeof THEME;
