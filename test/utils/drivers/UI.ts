@@ -116,4 +116,8 @@ export class UIAppDriver implements AppDriver {
   public async clickApplySettings() {
     await this.settingsModal.clickApplyButton();
   }
+
+  public async clickAdvancedViewOnStartCheckbox() {
+    await this.settingsModal.clickAdvancedViewOnStartCheckbox();
+  }
 }

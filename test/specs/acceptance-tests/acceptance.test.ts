@@ -197,52 +197,30 @@ describe("Settings", async () => {
   });
 });
 
-// describe.skip("Advanced View Startup Preference", async () => {
-//   it("should enable Advanced View on startup", async () => {
-//     await browser.reloadSession();
+describe("Advanced View Startup Preference", async () => {
+  const application = new AppDsl(new AppDrivers([Channels.UI, Channels.API]));
 
-//     const mainPage = new MainPage();
+  it("should enable Advanced View on startup", async () => {
+    await browser.reloadSession();
 
-//     const settingsModal = new Modal();
+    await application.checkAppMenuExist();
 
-//     const appMenu = new MenuBar("MongoDB Query Executor");
+    await application.clickOnSettingsMenu();
 
-//     const appMenuExists = await appMenu.doesAppMenuExist();
+    await application.checkSettingsMenuVisible();
 
-//     assert.equal(
-//       appMenuExists,
-//       true,
-//       "MongoDB Query Executor menu item exists"
-//     );
+    await application.clickAdvancedViewOnStartCheckbox();
 
-//     const successfulClickOnAppMenu = await appMenu.doMenuClickById("appName");
+    await application.clickApplySettings();
 
-//     assert.equal(
-//       successfulClickOnAppMenu,
-//       true,
-//       "Click on MongoDB Query Executor"
-//     );
+    await browser.reloadSession();
 
-//     const successfulClickOnSettingMenu = await appMenu.doMenuClickById(
-//       "settings"
-//     );
+    const queryHistorySection =
+      await application.getQueryHistoryResultsContainer();
 
-//     assert.equal(successfulClickOnSettingMenu, true, "Click on Settings");
-
-//     const settingsModalVisible = await settingsModal.modal;
-
-//     await expect(settingsModalVisible).toBeDisplayed();
-
-//     await settingsModal.clickAdvancedViewOnStartCheckbox();
-//     await settingsModal.clickApplyButton();
-
-//     await browser.reloadSession();
-
-//     const queryHistoryResults = await mainPage.queryHistoryResults;
-
-//     await expect(queryHistoryResults).toBeDisabled();
-//   });
-// });
+    await expect(queryHistorySection).toBeDisplayed();
+  });
+});
 
 // ========== Maintainable Acceptance Test Start ==========
 
