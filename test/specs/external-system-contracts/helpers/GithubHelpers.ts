@@ -1,4 +1,3 @@
-import nock from "nock";
 import { assert } from "chai";
 import * as semver from "semver";
 import { WireMock } from "wiremock-captain";
@@ -6,8 +5,8 @@ import { WireMock } from "wiremock-captain";
 import {
   GithubStubDriver,
   RealGithubDriver,
-} from "../drivers/GithubStubDriver";
-import type { GithubDriver } from "../types";
+} from "../../../utils/drivers/GithubStubDriver";
+import type { GithubDriver } from "../../../utils/types";
 
 abstract class BaseGithubDriverTest {
   public erpDriver: GithubDriver;
