@@ -213,6 +213,8 @@ describe("Advanced View Startup Preference", async () => {
 
     await application.clickApplySettings();
 
+    await application.checkSettingsMenuNotVisible();
+
     await browser.reloadSession();
 
     const queryHistorySection =

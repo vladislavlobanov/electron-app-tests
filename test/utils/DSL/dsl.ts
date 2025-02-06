@@ -214,6 +214,11 @@ export class AppDsl {
 
     await expect(settingsModalContainer).toBeDisplayed();
   }
+  public async checkSettingsMenuNotVisible() {
+    const settingsModalContainer = await this.driver.getModalContainer();
+
+    await expect(settingsModalContainer).not.toBeDisplayed();
+  }
 
   public async checkLightThemeSwitchVisible() {
     const lightThemeRadio = await this.driver.getLightThemeSwitch();
