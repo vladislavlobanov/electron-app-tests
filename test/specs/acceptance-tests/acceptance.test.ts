@@ -5,11 +5,11 @@ import { browser } from "wdio-electron-service";
 import { AppDsl, AppDrivers } from "../../utils/DSL/dsl";
 import { GithubStubDsl } from "../../utils/DSL/GithubStubDsl";
 import { GithubStubDriver } from "../../utils/drivers/GithubStubDriver";
-import { THEME } from "../../utils/const";
+import { Channels, THEME } from "../../utils/const";
 
 //Seeing Persisting Query History should run first
 describe("Seeing Persisting Query History", async () => {
-  let application = new AppDsl(new AppDrivers(["UI", "API"]));
+  let application = new AppDsl(new AppDrivers([Channels.UI, Channels.API]));
 
   it("should have saved queries under Query History", async () => {
     await application.toggleAdvancedView();
@@ -71,7 +71,7 @@ describe("Seeing Persisting Query History", async () => {
 });
 
 describe("Advanced View Toggle Test", () => {
-  const application = new AppDsl(new AppDrivers(["UI", "API"]));
+  const application = new AppDsl(new AppDrivers([Channels.UI, Channels.API]));
 
   it("should toggle advanced view and toggle query history", async () => {
     const queryHistorySection =
@@ -86,7 +86,7 @@ describe("Advanced View Toggle Test", () => {
 });
 
 describe("Viewing Results in JSON Format", () => {
-  const application = new AppDsl(new AppDrivers(["UI", "API"]));
+  const application = new AppDsl(new AppDrivers([Channels.UI, Channels.API]));
 
   it("should successfully run a find query and have a Query Result in JSON format", async () => {
     await application.setQuery(`{"name":"test1"}`);
@@ -99,7 +99,7 @@ describe("Viewing Results in JSON Format", () => {
 });
 
 describe("Change the Advanced View", async () => {
-  const application = new AppDsl(new AppDrivers(["UI", "API"]));
+  const application = new AppDsl(new AppDrivers([Channels.UI, Channels.API]));
 
   it("should successfully toggle Advanced view: on", async () => {
     await browser.reloadSession();
@@ -132,7 +132,7 @@ describe("Change the Advanced View", async () => {
 });
 
 describe("Settings", async () => {
-  const application = new AppDsl(new AppDrivers(["UI", "API"]));
+  const application = new AppDsl(new AppDrivers([Channels.UI, Channels.API]));
 
   beforeEach(async () => {
     await browser.reloadSession();
@@ -247,7 +247,7 @@ describe("Settings", async () => {
 // ========== Maintainable Acceptance Test Start ==========
 
 describe("MongoDB Query Execution Test", async () => {
-  const application = new AppDsl(new AppDrivers(["UI", "API"]));
+  const application = new AppDsl(new AppDrivers([Channels.UI, Channels.API]));
 
   beforeEach(async () => {
     await browser.reloadSession();
@@ -285,7 +285,7 @@ describe("MongoDB Query Execution Test", async () => {
 // Theme selection follows DSL but not Four Layer Model due to technical limitations.
 
 describe("Select Theme", async () => {
-  const application = new AppDsl(new AppDrivers(["UI", "API"]));
+  const application = new AppDsl(new AppDrivers([Channels.UI, Channels.API]));
 
   beforeEach(async () => {
     await browser.reloadSession();
