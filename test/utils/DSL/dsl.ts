@@ -123,6 +123,10 @@ export class AppDrivers implements AppDriver {
   public async clickApplySettings() {
     await this.driver.clickApplySettings();
   }
+
+  public async clickAdvancedViewOnStartCheckbox() {
+    await this.driver.clickAdvancedViewOnStartCheckbox();
+  }
 }
 
 export class AppDsl {
@@ -277,6 +281,10 @@ export class AppDsl {
 
   public async clickApplySettings() {
     await this.driver.clickApplySettings();
+  }
+
+  public async clickAdvancedViewOnStartCheckbox() {
+    await this.driver.clickAdvancedViewOnStartCheckbox();
   }
 
   public async clickCancelSettings() {
